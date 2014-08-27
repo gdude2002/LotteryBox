@@ -28,6 +28,7 @@ Things to do
 * Chest-specific keys, chest-agnostic keys
 * Adding chest keys to dungeon chest generation
 * Optional support for item, command and soft currency (ingame money) rewards
+* Probably some other stuff I forgot.
 
 Compiling
 =========
