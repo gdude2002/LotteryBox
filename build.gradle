@@ -1,0 +1,104 @@
+/**
+ * LotteryBox gradle builder
+ *
+ * Remember to replace all instances of "BasePlugin" and "baseplugin"
+ * with the actual name and package name of the plugin, and to set and
+ * update the version for the project when necessary.
+ *
+ * Other files to check:
+ * > settings.gradle
+ * > README.md
+ * > src/resources/*.yml
+ */
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'build-announcements'
+apply plugin: 'maven'
+apply plugin: 'ivy-publish'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc2'
+    }
+}
+
+apply plugin: 'fatjar'
+
+sourceCompatibility = 1.7
+version = '0.0.1'
+group = "me.gserv.lotterybox"
+
+repositories {
+    flatDir {
+        dirs 'lib'
+    }
+    // Bukkit
+    maven {
+        url 'http://repo.bukkit.org/content/groups/public/'
+    }
+
+    mavenCentral()
+}
+
+jar {
+    from sourceSets.main.allJava
+    archiveName = "LotteryBox-${version}.jar"
+}
+
+artifacts {
+    archives jar
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.artifactId = "LotteryBox"
+            repository(url: "file://localhost/var/www/gserv/cherry/repos/maven/")
+        }
+    }
+}
+
+publishing {
+    publications {
+        ivyJava(IvyPublication) {
+            from components.java
+            module "LotteryBox"
+        }
+    }
+    repositories {
+        ivy {
+            name "publish"
+            url "/var/www/gserv/cherry/repos/ivy/"
+        }
+    }
+}
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+}
+
+jar {
+    from sourceSets.main.allJava
+    archiveName = "LotteryBox-${version}-slim.jar"
+}
+
+fatJar {
+    from sourceSets.main.allJava
+    archiveName = "LotteryBox-${version}.jar"
+}
+
+dependencies {
+    compile 'org.bukkit:bukkit:1.7.9-R0.2', {
+        ext {
+            fatJarExclude = true
+        }
+    }
+    compile 'com.google.code.gson:gson:2.3'
+}
