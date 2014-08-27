@@ -8,7 +8,7 @@ My plugins: [WordWarning](https://github.com/gdude2002/WordWarning) | [Painter](
 **This plugin was inspired by a [plugin request thread by Jduffygames](http://forums.bukkit.org/threads/votingkeys.306669/).**
 
 LotteryBox is a chance-based rewards system. Players must somehow obtain
-a chest key, and bring it to a chest designated lottery box, where they will
+a chest key, and bring it to a chest designated as a lottery box, where they will
 be able to use it to "open" the chest for a chance at a reward.
 
 How these keys are obtained is up to you.
