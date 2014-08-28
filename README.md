@@ -18,6 +18,8 @@ require named keys, boxes that are empty or have a chance at one out of several
 rewards, or boxes that run commands instead of giving items - or any combination
 of the above.
 
+The latest jar is always available [here](http://bamboo.gserv.me/browse/PLUG-LOTBOX/latest/artifact/JOB1/Version-agnostic-jar/LotteryBox.jar).
+
 Things to do
 ============
 
