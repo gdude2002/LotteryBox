@@ -19,6 +19,7 @@ rewards, or boxes that run commands instead of giving items - or any combination
 of the above.
 
 The latest jar is always available [here](http://bamboo.gserv.me/browse/PLUG-LOTBOX/latest/artifact/JOB1/Version-agnostic-jar/LotteryBox.jar).
+Remember, your server must be running **Java 7 or later**. If you need me to compile for lower versions, let me know and I'll make it happen.
 
 Things to do
 ============
