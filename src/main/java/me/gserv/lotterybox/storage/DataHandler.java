@@ -4,11 +4,9 @@ import com.google.gson.Gson;
 import me.gserv.lotterybox.LotteryBox;
 import org.bukkit.Location;
 
-import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Map;
 
 public class DataHandler {
 
@@ -88,6 +86,16 @@ public class DataHandler {
             ) {
                 this.boxes = gson.fromJson(reader, HashMap.class);
                 reader.close();
+
+                for (String key : this.boxes.keySet()) {
+                    boolean result = this.addLocation(this.boxes.get(key), key);
+
+                    if (!result) {
+                        this.plugin.getLogger().warning(
+                                String.format("Error loading box %s: There's already another box there!", key)
+                        );
+                    }
+                }
                 return true;
             } catch (IOException e) {
                 this.plugin.getLogger().warning("Unable to read from boxes data file!");
@@ -131,8 +139,33 @@ public class DataHandler {
         }
     }
 
-    private void addLocation(HashMap<String, Object> box) {
-        // TODO
+    private boolean addLocation(HashMap<String, Object> box, String name) {
+        Integer x, y, z;
+        String world;
+
+        x = (Integer) box.get("x");
+        y = (Integer) box.get("y");
+        z = (Integer) box.get("z");
+        world = (String) box.get("world");
+
+        if (! this.locations.containsKey(world)) {
+            this.locations.put(world, new HashMap<Integer, HashMap<Integer, HashMap<Integer, String>>>());
+        }
+
+        if (! this.locations.get(world).containsKey(x)) {
+            this.locations.get(world).put(x, new HashMap<Integer, HashMap<Integer, String>>());
+        }
+
+        if (! this.locations.get(world).get(x).containsKey(y)) {
+            this.locations.get(world).get(x).put(y, new HashMap<Integer, String>());
+        }
+
+        if (! this.locations.get(world).get(x).get(y).containsKey(z)) {
+            this.locations.get(world).get(x).get(y).put(z, name);
+            return true;
+        }
+
+        return false;
     }
 
     // Getting methods
@@ -169,6 +202,16 @@ public class DataHandler {
         return this.boxes.containsKey(name);
     }
 
+    public Object getBoxOption(String name, String option) {
+        if (this.boxExists(name)) {
+            if (this.getBox(name).containsKey(option)) {
+                return this.getBox(name).get(option);
+            }
+        }
+
+        return null;
+    }
+
     // Adding methods
 
     public boolean addBox(String name, Location location) {
@@ -195,9 +238,35 @@ public class DataHandler {
         // Whether the box requires named keys
         box.put("named_keys", false);
 
-        this.boxes.put(name, box);
+        boolean result = this.addLocation(box, name);
 
-        return true;
+        if (result) {
+            this.boxes.put(name, box);
+        }
+
+        this.save();
+
+        this.plugin.getLogger().info(
+                String.format(
+                        "New lottery box created at %s, %s, %s on world %s.",
+                        box.get("x"), box.get("y"), box.get("z"), box.get("world")
+                )
+        );
+
+        return result;
+    }
+
+    // Setting methods
+
+    public boolean setBoxOption(String name, String option, Object value) {
+        if (this.boxExists(name)) {
+            if (this.getBox(name).containsKey(option)) {
+                this.getBox(name).put(option, value);
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
