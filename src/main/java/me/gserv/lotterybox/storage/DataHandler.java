@@ -14,13 +14,13 @@ public class DataHandler {
     private HashMap<String, Map<String, Object>> boxes;
 
     // GSON serializer
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
     // Main plugin
-    private LotteryBox plugin;
+    private final LotteryBox plugin;
 
     // File object
-    private File fh;
+    private final File fh;
 
     public DataHandler(LotteryBox plugin) {
         this.plugin = plugin;

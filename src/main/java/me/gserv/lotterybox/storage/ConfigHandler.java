@@ -7,8 +7,8 @@ import java.io.File;
 
 public class ConfigHandler {
 
-    private LotteryBox plugin;
-    private FileConfiguration config;
+    private final LotteryBox plugin;
+    private final FileConfiguration config;
 
     public ConfigHandler(LotteryBox plugin) {
         this.plugin = plugin;

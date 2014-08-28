@@ -1,10 +1,9 @@
 package me.gserv.lotterybox;
 
 /**
- * Base plugin designed for use with my other projects.
+ * Lottery box plugin
  *
- * It's simply a template for a Bukkit plugin. It should be used
- * as a template. Copy it elsewhere and edit.
+ * This allows designation of chests as lottery boxes, which can be "opened" using "keys".
  */
 
 /*
@@ -25,13 +24,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class LotteryBox extends JavaPlugin {
 
     // Configuration handler
-    public ConfigHandler config;
+    private ConfigHandler config;
 
     // Data handler
-    public DataHandler data;
+    private DataHandler data;
 
     // Listener for chat events
-    public ChatListener listener;
+    private ChatListener listener;
 
     @Override
     public void onEnable() {
