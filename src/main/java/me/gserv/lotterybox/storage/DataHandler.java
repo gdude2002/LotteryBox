@@ -11,61 +11,80 @@ import java.util.Map;
 public class DataHandler {
 
     // Internal storage for the boxes themselves
-    HashMap<String, Map<String, Object>> boxes;
+    private HashMap<String, Map<String, Object>> boxes;
 
     // GSON serializer
-    Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     // Main plugin
-    LotteryBox plugin;
+    private LotteryBox plugin;
+
+    // File object
+    private File fh;
 
     public DataHandler(LotteryBox plugin) {
         this.plugin = plugin;
+        this.fh = new File(this.plugin.getDataFolder() + "/boxes.json");
     }
 
     @SuppressWarnings("unchecked")
     public boolean load() {
-        File fh = new File(this.plugin.getDataFolder() + "/boxes.json");
-        if (!fh.exists()) {
-            try {
-                boolean created = fh.createNewFile();
-
-                if (!created) {
-                    this.plugin.getLogger().warning("Unable to create boxes.json!");
-                    return false;
-                }
-            } catch (IOException e) {
-                this.plugin.getLogger().warning("Unable to create boxes.json!");
-                e.printStackTrace();
-                return false;
-            }
-
+        if (!this.fh.exists()) {
             this.boxes = new HashMap<>();
-            HashMap<String, Object> inner = new HashMap<>();
-            inner.put("key", "value");
-            inner.put("another key", 2);
-
-            this.boxes.put("box1", inner);
-
-            try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(fh, false), Charset.forName("UTF-8"))) {
-                gson.toJson(this.boxes, writer);
-                writer.flush();
-                writer.close();
-                return true;
-            } catch (IOException e) {
-                this.plugin.getLogger().warning("Unable to write to boxes.json!");
-                e.printStackTrace();
-                return false;
-            }
+            return this.save();
         } else {
-            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(fh), Charset.forName("UTF-8"))) {
+            try (
+                    InputStreamReader reader = new InputStreamReader(
+                            new FileInputStream(this.fh),
+                            Charset.forName("UTF-8")
+                    )
+            ) {
                 this.boxes = gson.fromJson(reader, HashMap.class);
                 reader.close();
                 return true;
             } catch (IOException e) {
+                this.plugin.getLogger().warning("Unable to read from boxes data file!");
                 e.printStackTrace();
                 return false;
             }
         }
+    }
+
+    public boolean save() {
+        if (!this.fh.exists()) {
+            this.plugin.getLogger().info("Boxes data file not found - creating..");
+            try {
+                boolean created = this.fh.createNewFile();
+
+                if (!created) {
+                    this.plugin.getLogger().warning("Unable to create boxes data file!");
+                    return false;
+                }
+            } catch (IOException e) {
+                this.plugin.getLogger().warning("Unable to create boxes data file!");
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        try (
+                OutputStreamWriter writer = new OutputStreamWriter(
+                        new FileOutputStream(this.fh, false),
+                        Charset.forName("UTF-8")
+                )
+        ) {
+            gson.toJson(this.boxes, writer);
+            writer.flush();
+            writer.close();
+            return true;
+        } catch (IOException e) {
+            this.plugin.getLogger().warning("Unable to write boxes data file!");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public HashMap<String, Map<String, Object>> getBoxes() {
+        return this.boxes;
     }
 }
