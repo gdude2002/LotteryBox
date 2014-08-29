@@ -19,6 +19,10 @@ package me.gserv.lotterybox;
 import me.gserv.lotterybox.storage.ConfigHandler;
 import me.gserv.lotterybox.listeners.ChatListener;
 import me.gserv.lotterybox.storage.DataHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LotteryBox extends JavaPlugin {
@@ -30,7 +34,7 @@ public final class LotteryBox extends JavaPlugin {
     private DataHandler data;
 
     // Listener for chat events
-    private ChatListener listener;
+//    private ChatListener listener;
 
     @Override
     public void onEnable() {
@@ -40,9 +44,12 @@ public final class LotteryBox extends JavaPlugin {
 
         this.data.load();
 
+        this.data.getBox("test").addItemReward("test", new ItemStack(Material.getMaterial("DIAMOND")), 5);
+        this.data.save();
+
         // Create a new chat listener and register it
-        listener = new ChatListener(this);
-        this.getServer().getPluginManager().registerEvents(listener, this);
+//        listener = new ChatListener(this);
+//        this.getServer().getPluginManager().registerEvents(listener, this);
     }
 
     public void reload() {

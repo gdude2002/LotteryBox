@@ -1,62 +1,29 @@
 package me.gserv.lotterybox.storage;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import me.gserv.lotterybox.LotteryBox;
+import me.gserv.lotterybox.boxes.Box;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class DataHandler {
 
-    /* Data storage formatting for `boxes`
-        {
-            "chest name": {
-                "x": 123,
-                "y": 123,
-                "z": 123,
-                "rewards": {
-                    "provide": {
-                        "type": "item",     // Stringly typed
-                        "item": "DIAMOND",  // Item name
-                        "amount": 1,        // Item amount
-                        "chance": 5         // Relative chance
-                    },
-                    "promote": {
-                        "type": "command",                                // Stringly typed
-                        "command": "pex user {PLAYER} group set winner",  // Command, with tokens
-                        "chance": 10                                      // Relative chance
-                    },
-                    "pay": {
-                        "type": "money",  // Stringly typed
-                        "amount": 50,     // Amount, negative for reduction
-                        "chance": 20      // Relative chance
-                    }
-                },
-                "chance": 20,  // Chance of getting a reward, out of 100
-                "infinite": false,  // Whether players can receive rewards infinitely or the box has to be reset
-                "uses": 1,  // Number of rewards to be received if not infinite
-                "named_keys": false  // Whether only named keys can open this chest
-            }
-        }
-     */
-
     // Internal storage for the boxes themselves
-    private HashMap<String,
-                HashMap<String, Object>
-            > boxes;
+    private HashMap<String, Box> boxes;
+
+    // TypeToken for deserializing the JSON
+    private Type token = new TypeToken<HashMap<String, Box>>(){}.getType();
 
     // Locations for quicker lookups
-    private HashMap<String,  // World
-                HashMap<Integer,  // X
-                    HashMap<Integer,  // Y
-                        HashMap<Integer,  // Z
-                                String    // Box name
-                        >
-                    >
-                >
-            > locations;
+    private HashMap<Location, Box> locations = new HashMap<>();
 
     // GSON serializer
     private final Gson gson = new Gson();
@@ -72,7 +39,6 @@ public class DataHandler {
         this.fh = new File(this.plugin.getDataFolder() + "/boxes.json");
     }
 
-    @SuppressWarnings("unchecked")
     public boolean load() {
         if (!this.fh.exists()) {
             this.boxes = new HashMap<>();
@@ -84,11 +50,11 @@ public class DataHandler {
                             Charset.forName("UTF-8")
                     )
             ) {
-                this.boxes = gson.fromJson(reader, HashMap.class);
+                this.boxes = this.gson.fromJson(reader, this.token);
                 reader.close();
 
                 for (String key : this.boxes.keySet()) {
-                    boolean result = this.addLocation(this.boxes.get(key), key);
+                    boolean result = this.addLocation(this.boxes.get(key));
 
                     if (!result) {
                         this.plugin.getLogger().warning(
@@ -139,131 +105,76 @@ public class DataHandler {
         }
     }
 
-    private boolean addLocation(HashMap<String, Object> box, String name) {
-        Integer x, y, z;
-        String world;
-
-        x = (Integer) box.get("x");
-        y = (Integer) box.get("y");
-        z = (Integer) box.get("z");
-        world = (String) box.get("world");
-
-        if (! this.locations.containsKey(world)) {
-            this.locations.put(world, new HashMap<Integer, HashMap<Integer, HashMap<Integer, String>>>());
-        }
-
-        if (! this.locations.get(world).containsKey(x)) {
-            this.locations.get(world).put(x, new HashMap<Integer, HashMap<Integer, String>>());
-        }
-
-        if (! this.locations.get(world).get(x).containsKey(y)) {
-            this.locations.get(world).get(x).put(y, new HashMap<Integer, String>());
-        }
-
-        if (! this.locations.get(world).get(x).get(y).containsKey(z)) {
-            this.locations.get(world).get(x).get(y).put(z, name);
-            return true;
-        }
-
-        return false;
-    }
-
     // Getting methods
 
-    /**
-     * Get a box if it exists, or null otherwise.
-     *
-     * @param name The name of the box
-     * @return HashMap representing the box, or null if it doesn't exist
-     */
-    public HashMap<String, Object> getBox(String name) {
+    public Box getBox(String name) {
         if (this.boxes.containsKey(name)) {
             return this.boxes.get(name);
         }
         return null;
     }
 
-    /**
-     * Get the number of boxes in existence.
-     *
-     * @return The number of boxes that exist
-     */
     public int getNumBoxes() {
         return this.boxes.size();
     }
 
-    /**
-     * Check whether a box exists.
-     *
-     * @param name The name of the box
-     * @return boolean representing whether the box exists
-     */
     public boolean boxExists(String name) {
         return this.boxes.containsKey(name);
     }
 
-    public Object getBoxOption(String name, String option) {
-        if (this.boxExists(name)) {
-            if (this.getBox(name).containsKey(option)) {
-                return this.getBox(name).get(option);
-            }
-        }
-
-        return null;
+    public boolean boxExistsAtLocation(Location location) {
+        return this.locations.containsKey(location);
     }
 
     // Adding methods
 
     public boolean addBox(String name, Location location) {
-        if (this.boxes.containsKey(name)) {
+        return this.addBox(new Box(name, location));
+    }
+
+    public boolean addBox(Box box) {
+        if (this.boxExists(box.name) || this.boxExistsAtLocation(box.getLocation())) {
             return false;
         }
 
-        HashMap<String, Object> box = new HashMap<>();
-
-        // Location of the box
-        box.put("x", location.getBlockX());
-        box.put("y", location.getBlockY());
-        box.put("z", location.getBlockZ());
-        box.put("world", location.getWorld().getName());
-
-        // Default rewards and chance
-        box.put("rewards", new HashMap<String, HashMap<String, Object>>());
-        box.put("chance", 20);
-
-        // Uses information
-        box.put("infinite", false);
-        box.put("uses", 1);
-
-        // Whether the box requires named keys
-        box.put("named_keys", false);
-
-        boolean result = this.addLocation(box, name);
+        boolean result = this.addLocation(box);
 
         if (result) {
-            this.boxes.put(name, box);
+            this.boxes.put(box.name, box);
         }
 
         this.save();
-
-        this.plugin.getLogger().info(
-                String.format(
-                        "New lottery box created at %s, %s, %s on world %s.",
-                        box.get("x"), box.get("y"), box.get("z"), box.get("world")
-                )
-        );
-
         return result;
     }
 
-    // Setting methods
+    private boolean addLocation(Box box) {
+        Location location = box.getLocation();
 
-    public boolean setBoxOption(String name, String option, Object value) {
-        if (this.boxExists(name)) {
-            if (this.getBox(name).containsKey(option)) {
-                this.getBox(name).put(option, value);
-                return true;
+        if (!this.locations.containsKey(location)) {
+            this.locations.put(location, box);
+            return true;
+        }
+
+        return false;
+    }
+
+    // Removing methods
+
+    public boolean removeBox(String name) {
+        return this.boxExists(name) && this.removeBox(this.getBox(name));
+
+    }
+
+    public boolean removeBox(Box box) {
+        if (this.boxExists(box.name)) {
+            if (this.boxExistsAtLocation(box.getLocation())) {
+                this.locations.remove(box.getLocation());
             }
+
+            this.boxes.remove(box.name);
+            this.save();
+
+            return true;
         }
 
         return false;
