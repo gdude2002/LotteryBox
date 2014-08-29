@@ -44,9 +44,6 @@ public final class LotteryBox extends JavaPlugin {
 
         this.data.load();
 
-        this.data.getBox("test").addItemReward("test", new ItemStack(Material.getMaterial("DIAMOND")), 5);
-        this.data.save();
-
         // Create a new chat listener and register it
 //        listener = new ChatListener(this);
 //        this.getServer().getPluginManager().registerEvents(listener, this);
