@@ -20,6 +20,7 @@ public class MkBoxCommand implements CommandExecutor {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         // /mkbox <name> [world] [x] [y] [z]
 
@@ -63,7 +64,7 @@ public class MkBoxCommand implements CommandExecutor {
 
             if (strings.length < 1) {
                 commandSender.sendMessage("/mkbox - Create a lottery box");
-                commandSender.sendMessage("Usage: mkbox <name> [world] [x] [y] [z]");
+                commandSender.sendMessage("Usage: /mkbox <name> [world] [x] [y] [z]");
                 return true;
             }
         }
@@ -126,23 +127,17 @@ public class MkBoxCommand implements CommandExecutor {
             location = block.getLocation();
         }
 
-        boolean result = this.plugin.getDataHandler().boxExists(strings[0]);
-
-        if (result) {
+        if (this.plugin.getDataHandler().boxExists(strings[0])) {
             commandSender.sendMessage(String.format("There's already a box named %s", strings[0]));
             return true;
         }
 
-        result = this.plugin.getDataHandler().boxExistsAtLocation(location);
-
-        if (result) {
+        if (this.plugin.getDataHandler().boxExistsAtLocation(location)) {
             commandSender.sendMessage("A box already exists at this location");
             return true;
         }
 
-        result = this.plugin.getDataHandler().addBox(strings[0], location);
-
-        if (!result) {
+        if (!this.plugin.getDataHandler().addBox(strings[0], location)) {
             commandSender.sendMessage("Failed to create box, please check the console");
             return true;
         }

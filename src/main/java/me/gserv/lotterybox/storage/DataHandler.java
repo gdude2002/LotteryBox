@@ -61,6 +61,14 @@ public class DataHandler {
                                 String.format("Error loading box %s: There's already another box there!", key)
                         );
                     }
+
+                    if (!this.boxes.get(key).validate()) {
+                        this.plugin.getLogger().warning(
+                                String.format("Box %s has been removed or its location doesn't exist, removing..", key)
+                        );
+                        this.removeBox(key);
+                    }
+
                 }
                 return true;
             } catch (IOException e) {
@@ -112,6 +120,13 @@ public class DataHandler {
             return this.boxes.get(name);
         }
         return null;
+    }
+
+    public HashSet<Box> getBoxes() {
+        HashSet<Box> boxes = new HashSet<>();
+        boxes.addAll(this.boxes.values());
+
+        return boxes;
     }
 
     public int getNumBoxes() {

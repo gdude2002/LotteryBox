@@ -8,15 +8,36 @@ main: me.gserv.lotterybox.LotteryBox
 database: false
 
 commands:
+    chbox:
+        description: Edits a lottery box
+        usage: /<command> <name>
+        permission: lotterybox.chbox
+    lsbox:
+        description: Lists lottery boxes and gets information on them
+        usage: /<command> [name] ["rewards"]
+        permission: lotterybox.lsbox
     mkbox:
         description: Creates a lottery box
         usage: /<command> <name> [world] [x] [y] [z]
         permission: lotterybox.mkbox
+    rmbox:
+        description: Removes a lottery box
+        usage: /<command> <name>
+        permission: lotterybox.rmbox
 
 permissions:
     lotterybox.*:
         children:
+            - lotterybox.chbox
+            - lotterybox.lsbox
             - lotterybox.mkbox
+            - lotterybox.rmbox
         description: All the LotteryBox permissions
+    lotterybox.chbox:
+        description: Access the /chbox command
+    lotterybox.lsbox:
+        description: Access the /lsbox command
     lotterybox.mkbox:
         description: Access the /mkbox command
+    lotterybox.rmbox:
+        description: Access the /rmbox command

@@ -2,6 +2,9 @@ package me.gserv.lotterybox.boxes;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -141,6 +144,15 @@ public class Box {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
+    public HashMap<String, HashMap<String, Object>> getRewards() {
+        return (HashMap<String, HashMap<String, Object>>) this.rewards.clone();
+    }
+
+    public int numRewards() {
+        return this.rewards.size();
+    }
+
     public boolean hasReward(String name) {
         return this.rewards.containsKey(name);
     }
@@ -175,6 +187,12 @@ public class Box {
     }
 
     public Location getLocation() {
+        World world = Bukkit.getWorld(this.world);
+
+        if (world == null) {
+            return null;
+        }
+
         return new Location(Bukkit.getWorld(this.world), this.x, this.y, this.z);
     }
 
@@ -219,6 +237,18 @@ public class Box {
 
     public void setNamedKeys(boolean namedKeys) {
         this.namedKeys = namedKeys;
+    }
+
+    public boolean validate() {
+        Location l = this.getLocation();
+
+        if (l == null) {
+            return false;
+        }
+
+        Block b = l.getBlock();
+
+        return !(b == null || b.getType() != Material.CHEST);
     }
     //</editor-fold>
 }
