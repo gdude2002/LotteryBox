@@ -7,10 +7,16 @@ author: Gareth Coles
 main: me.gserv.lotterybox.LotteryBox
 database: false
 
+commands:
+    mkbox:
+        description: Creates a lottery box
+        usage: /<command> <name> [world] [x] [y] [z]
+        permission: lotterybox.mkbox
+
 permissions:
     lotterybox.*:
         children:
-            - lotterybox.bypass
-        description: All the BasePlugin permissions
-    lotterybox.bypass:
-        description: Bypass the example chat listener
+            - lotterybox.mkbox
+        description: All the LotteryBox permissions
+    lotterybox.mkbox:
+        description: Access the /mkbox command

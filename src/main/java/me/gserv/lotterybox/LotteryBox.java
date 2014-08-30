@@ -16,6 +16,7 @@ package me.gserv.lotterybox;
     * Permissions (obviously)
  */
 
+import me.gserv.lotterybox.commands.MkBoxCommand;
 import me.gserv.lotterybox.storage.ConfigHandler;
 import me.gserv.lotterybox.listeners.ChatListener;
 import me.gserv.lotterybox.storage.DataHandler;
@@ -33,6 +34,9 @@ public final class LotteryBox extends JavaPlugin {
     // Data handler
     private DataHandler data;
 
+    // mkbox command
+    private MkBoxCommand mkBoxcommand;
+
     // Listener for chat events
 //    private ChatListener listener;
 
@@ -44,6 +48,10 @@ public final class LotteryBox extends JavaPlugin {
 
         this.data.load();
 
+        this.mkBoxcommand = new MkBoxCommand(this);
+
+        this.getCommand("mkbox").setExecutor(this.mkBoxcommand);
+
         // Create a new chat listener and register it
 //        listener = new ChatListener(this);
 //        this.getServer().getPluginManager().registerEvents(listener, this);
@@ -51,5 +59,13 @@ public final class LotteryBox extends JavaPlugin {
 
     public void reload() {
         this.config.reload();
+    }
+
+    public DataHandler getDataHandler() {
+        return this.data;
+    }
+
+    public ConfigHandler getConfigHandler() {
+        return this.config;
     }
 }
