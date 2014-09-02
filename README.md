@@ -48,6 +48,11 @@ I use Gradle instead of Maven simply because I don't like Maven, and Gradle is m
 If you need to do Maven things, you can do `gradle install`, which will generate poms and install the plugin
 into your local maven repository. Poms are generated in `build/poms/`.
 
+Buy me a soda
+=============
+
+Sometimes people ask me to accept donations. If you like what I do, you can donate [here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=85GN242EDQSCJ).
+
 ---
 
 My plugins: [WordWarning](https://github.com/gdude2002/WordWarning) | [Painter](https://github.com/gdude2002/Painter) | **LotteryBox**
