@@ -136,6 +136,54 @@ public class Box {
         return false;
     }
 
+    public boolean setRewardChance(String name, int chance) {
+        if (!this.hasReward(name)) {
+            return false;
+        }
+
+        HashMap<String, Object> reward = this.getRewards().get(name);
+        reward.put("chance", chance);
+
+        return true;
+    }
+
+    public boolean setRewardValue(String name, Object value) {
+        if (!this.hasReward(name)) {
+            return false;
+        }
+
+        HashMap<String, Object> reward = this.getRewards().get(name);
+        String type = (String) reward.get("type");
+
+        switch(type.toLowerCase()) {
+            case "command":
+                if (value instanceof String) {
+                    reward.put("command", value);
+                } else {
+                    return false;
+                }
+                break;
+            case "item":
+                if (value instanceof ItemStack) {
+                    reward.put("item", value);
+                } else {
+                    return false;
+                }
+                break;
+            case "money":
+                if (value instanceof Integer) {
+                    reward.put("amount", value);
+                } else {
+                    return false;
+                }
+                break;
+            default:
+                return false;
+        }
+
+        return true;
+    }
+
     public boolean removeReward(String name) {
         if (this.hasReward(name)) {
             this.rewards.remove(name);

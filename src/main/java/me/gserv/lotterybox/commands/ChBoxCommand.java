@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+
 public class ChBoxCommand implements CommandExecutor {
     private final LotteryBox plugin;
 
@@ -105,6 +107,7 @@ public class ChBoxCommand implements CommandExecutor {
                     commandSender.sendMessage("/chbox reward <name> set <reward name> <value> - Set the reward item/amount/command");
                     commandSender.sendMessage("");
                     commandSender.sendMessage("Reward types: item, command, money");
+                    commandSender.sendMessage("Specifying items: \"hand\" or \"type[:amount]\"");
                     break;
                 default:
                     commandSender.sendMessage(String.format("Unknown operation: %s", operation));
@@ -242,7 +245,19 @@ public class ChBoxCommand implements CommandExecutor {
                     commandSender.sendMessage("Usage: /chbox reward <name> chance <reward name> <chance>");
                     commandSender.sendMessage("See /chbox help reward for more information.");
                 } else {
+                    if (!box.hasReward(rewardName)) {
+                        commandSender.sendMessage(String.format("Unknown reward: %s", rewardName));
+                    } else {
+                        String value = strings[4];
 
+                        try {
+                            int x = Integer.parseInt(value);
+                            box.setRewardChance(rewardName, x);
+                            commandSender.sendMessage(String.format("Reward %s now has a %s chance of being dispensed", rewardName, x));
+                        } catch (NumberFormatException e) {
+                            commandSender.sendMessage(String.format("%s is not \"infinite\" or a number, or is too large", value));
+                        }
+                    }
                 }
                 break;
             case "set":
@@ -250,7 +265,73 @@ public class ChBoxCommand implements CommandExecutor {
                     commandSender.sendMessage("Usage: /chbox reward <name> set <reward name> <value>");
                     commandSender.sendMessage("See /chbox help reward for more information.");
                 } else {
+                    if (!box.hasReward(rewardName)) {
+                        commandSender.sendMessage(String.format("Unknown reward: %s", rewardName));
+                    } else {
+                        String value = strings[4];
 
+                        HashMap<String, Object> reward = box.getRewards().get(rewardName);
+                        String type = (String) reward.get("type");
+                        boolean r;
+
+                        if ("command".equalsIgnoreCase(type)) {
+                            if (value.charAt(0) == '/') {
+                                value = value.substring(1);
+                            }
+
+                            r = box.setRewardValue(rewardName, value);
+
+                            if (!r) {
+                                commandSender.sendMessage("Invalid reward command specified!");
+                            } else {
+                                commandSender.sendMessage(String.format("Reward command set: %s", value));
+                            }
+
+                        } else if ("item".equalsIgnoreCase(type)) {
+                            ItemStack item;
+
+                            if ("hand".equalsIgnoreCase(value) && commandSender instanceof Player) {
+                                Player player = (Player) commandSender;
+                                item = player.getItemInHand();
+                            } else {
+                                String[] parts = value.split(":");
+                                Material mat = Material.getMaterial(parts[0]);
+                                int amount = 1;
+
+                                if (mat == null) {
+                                    commandSender.sendMessage(String.format("Unknown item type: %s", parts[0]));
+                                    return;
+                                } else {
+                                    if (parts.length > 1) {
+                                        try {
+                                            amount = Integer.parseInt(parts[1]);
+                                        } catch (NumberFormatException e) {
+                                            commandSender.sendMessage(String.format("%s is not a number, or is too large", parts[1]));
+                                            return;
+                                        }
+                                    }
+
+                                    item = new ItemStack(mat, amount);
+                                }
+
+                                box.setRewardValue(rewardName, item);
+                                commandSender.sendMessage(String.format("Item reward set: %s %s(s)", amount, item.getType().toString()));
+                            }
+                        } else if ("money".equalsIgnoreCase(type)) {
+                            Integer x;
+
+                            try {
+                                x = Integer.parseInt(value);
+                                box.setRewardValue(rewardName, x);
+                                commandSender.sendMessage(String.format("Reward %s now has a %s chance of being dispensed", rewardName, x));
+                            } catch (NumberFormatException e) {
+                                commandSender.sendMessage(String.format("%s is not a number, or is too large", value));
+                            }
+
+                        } else {
+                            commandSender.sendMessage(String.format("Unknown type: %s - this should never happen", type));
+                        }
+                    }
                 }
                 break;
             default:
