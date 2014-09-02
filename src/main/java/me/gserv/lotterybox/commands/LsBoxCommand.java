@@ -59,7 +59,7 @@ public class LsBoxCommand implements CommandExecutor {
                                 )
                 );
             }
-        } else if (strings.length == 1) {
+        } else if (strings.length < 2) {
             Box box = this.plugin.getDataHandler().getBox(strings[0]);
 
             if (box == null) {
@@ -103,7 +103,7 @@ public class LsBoxCommand implements CommandExecutor {
             for (String key : rewards.keySet()) {
                 HashMap<String, Object> reward = rewards.get(key);
 
-                if ("item".equals(reward.get("item"))) {
+                if ("item".equals(reward.get("type"))) {
                     ItemStack item = ItemStack.deserialize((java.util.Map<String, Object>) reward.get("item"));
                     commandSender.sendMessage(
                             String.format(
@@ -112,7 +112,7 @@ public class LsBoxCommand implements CommandExecutor {
                                     item.getType().toString(), item.getAmount()
                             )
                     );
-                } else if ("item".equals(reward.get("command"))) {
+                } else if ("command".equals(reward.get("type"))) {
                     commandSender.sendMessage(
                             String.format(
                                     "[%s] %s (%s chance) - %s",
@@ -120,7 +120,7 @@ public class LsBoxCommand implements CommandExecutor {
                                     reward.get("command")
                             )
                     );
-                } else if ("item".equals(reward.get("money"))) {
+                } else if ("money".equals(reward.get("type"))) {
                     if ((int) reward.get("amount") >= 0) {
                         commandSender.sendMessage(
                                 String.format(
@@ -132,7 +132,7 @@ public class LsBoxCommand implements CommandExecutor {
                     } else {
                         commandSender.sendMessage(
                                 String.format(
-                                        "[%s] %s (%s chance) - _%s",
+                                        "[%s] %s (%s chance) - -%s",
                                         "Money", key, reward.get("chance"),
                                         reward.get("amount")
                                 )

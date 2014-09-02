@@ -64,6 +64,8 @@ public class ChBoxCommand implements CommandExecutor {
                 break;
         }
 
+        this.plugin.getDataHandler().save();
+
         return true;
     }
 
@@ -268,7 +270,12 @@ public class ChBoxCommand implements CommandExecutor {
                     if (!box.hasReward(rewardName)) {
                         commandSender.sendMessage(String.format("Unknown reward: %s", rewardName));
                     } else {
-                        String value = strings[4];
+                        String value = "";
+                        for (int i = 4; i < strings.length; i += 1) {
+                            value += (strings[i] + " ");
+                        }
+
+                        value = value.trim();
 
                         HashMap<String, Object> reward = box.getRewards().get(rewardName);
                         String type = (String) reward.get("type");
@@ -295,7 +302,7 @@ public class ChBoxCommand implements CommandExecutor {
                                 item = player.getItemInHand();
                             } else {
                                 String[] parts = value.split(":");
-                                Material mat = Material.getMaterial(parts[0]);
+                                Material mat = Material.matchMaterial(parts[0]);
                                 int amount = 1;
 
                                 if (mat == null) {
@@ -324,7 +331,7 @@ public class ChBoxCommand implements CommandExecutor {
                             try {
                                 x = Integer.parseInt(value);
                                 box.setRewardValue(rewardName, x);
-                                commandSender.sendMessage(String.format("Reward %s now has a %s chance of being dispensed", rewardName, x));
+                                commandSender.sendMessage(String.format("Money reward set: %s", x));
                             } catch (NumberFormatException e) {
                                 commandSender.sendMessage(String.format("%s is not a number, or is too large", value));
                             }

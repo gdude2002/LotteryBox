@@ -165,7 +165,7 @@ public class Box {
                 break;
             case "item":
                 if (value instanceof ItemStack) {
-                    reward.put("item", value);
+                    reward.put("item", ((ItemStack) value).serialize());
                 } else {
                     return false;
                 }
