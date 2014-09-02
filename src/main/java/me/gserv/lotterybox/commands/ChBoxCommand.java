@@ -313,10 +313,11 @@ public class ChBoxCommand implements CommandExecutor {
 
                                     item = new ItemStack(mat, amount);
                                 }
-
-                                box.setRewardValue(rewardName, item);
-                                commandSender.sendMessage(String.format("Item reward set: %s %s(s)", amount, item.getType().toString()));
                             }
+
+                            box.setRewardValue(rewardName, item);
+                            commandSender.sendMessage(String.format("Item reward set: %s %s(s)", item.getAmount(), item.getType().toString()));
+
                         } else if ("money".equalsIgnoreCase(type)) {
                             Integer x;
 
