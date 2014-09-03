@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Box {
@@ -298,6 +299,29 @@ public class Box {
         Block b = l.getBlock();
 
         return !(b == null || b.getType() != Material.CHEST);
+    }
+
+    public void fixRewards() {
+        for (String key : this.rewards.keySet()) {
+            HashMap<String, Object> reward = this.rewards.get(key);
+
+            this.iterateMap(reward);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void iterateMap(Map<String, Object> map) {
+        for (String key : map.keySet()) {
+            Object obj = map.get(key);
+
+            if (obj instanceof Double) {
+                map.put(key, ((Double) obj).intValue());
+            } else if (obj instanceof Float) {
+                map.put(key, ((Float) obj).intValue());
+            } else if (obj instanceof Map) {
+                this.iterateMap((Map) obj);
+            }
+        }
     }
     //</editor-fold>
 }

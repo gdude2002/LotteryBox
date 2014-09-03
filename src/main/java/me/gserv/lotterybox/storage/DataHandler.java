@@ -25,8 +25,8 @@ public class DataHandler {
     // Locations for quicker lookups
     private HashMap<Location, Box> locations = new HashMap<>();
 
-    // GSON serializer (which converts doubles to ints)
-    Gson gson;
+    // GSON serializer
+    private final Gson gson = new Gson();
 
     // Main plugin
     private final LotteryBox plugin;
@@ -36,30 +36,7 @@ public class DataHandler {
 
     public DataHandler(LotteryBox plugin) {
         this.plugin = plugin;
-        this.fh = new File(this.plugin.getDataFolder(), "boxes.json");
-
-        GsonBuilder gsonBuilder = new GsonBuilder();
-
-        gsonBuilder.registerTypeAdapter(Double.class,  new JsonSerializer<Double>() {
-
-            @Override
-            public JsonElement serialize(Double src, Type typeOfSrc,
-                                         JsonSerializationContext context) {
-                Integer value = (int) Math.round(src);
-                return new JsonPrimitive(value);
-            }
-        });
-
-        gsonBuilder.registerTypeAdapter(Double.class,  new JsonDeserializer<Integer>() {
-
-            @Override
-            public Integer deserialize(JsonElement json, Type typeOfT,
-                                      JsonDeserializationContext context) throws JsonParseException {
-                return context.deserialize(json, Integer.class);
-            }
-        });
-
-        this.gson = gsonBuilder.create();
+        this.fh = new File(this.plugin.getDataFolder() + "/boxes.json");
     }
 
     public boolean load() {
@@ -77,6 +54,7 @@ public class DataHandler {
                 reader.close();
 
                 for (String key : this.boxes.keySet()) {
+                    this.boxes.get(key).fixRewards();
                     boolean result = this.addLocation(this.boxes.get(key));
 
                     if (!result) {

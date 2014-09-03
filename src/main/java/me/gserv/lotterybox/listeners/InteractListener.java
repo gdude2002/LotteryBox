@@ -83,7 +83,7 @@ public class InteractListener implements Listener {
                                         result.getName(), itemReward.getType().toString(), itemReward.getAmount()
                                 ));
 
-                                HashMap<Integer, ItemStack> insertResult = p.getInventory().addItem(item);
+                                HashMap<Integer, ItemStack> insertResult = p.getInventory().addItem(itemReward);
 
                                 if (!insertResult.isEmpty()) {
                                     p.sendMessage(
@@ -94,6 +94,7 @@ public class InteractListener implements Listener {
                                         p.getWorld().dropItem(p.getLocation(), toDrop);
                                     }
                                 }
+                                break;
                             case "command":
                                 String command = (String) reward.get("command");
 
@@ -111,6 +112,7 @@ public class InteractListener implements Listener {
                                 command = command.replace("{REWARD}", result.getName());
 
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                                break;
                             case "money":
                                 // TODO: Vault
                                 break;
