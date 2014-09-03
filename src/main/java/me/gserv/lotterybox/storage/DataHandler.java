@@ -1,6 +1,6 @@
 package me.gserv.lotterybox.storage;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import me.gserv.lotterybox.LotteryBox;
 import me.gserv.lotterybox.boxes.Box;
@@ -25,8 +25,8 @@ public class DataHandler {
     // Locations for quicker lookups
     private HashMap<Location, Box> locations = new HashMap<>();
 
-    // GSON serializer
-    private final Gson gson = new Gson();
+    // GSON serializer (which converts doubles to ints)
+    Gson gson;
 
     // Main plugin
     private final LotteryBox plugin;
@@ -36,7 +36,30 @@ public class DataHandler {
 
     public DataHandler(LotteryBox plugin) {
         this.plugin = plugin;
-        this.fh = new File(this.plugin.getDataFolder() + "/boxes.json");
+        this.fh = new File(this.plugin.getDataFolder(), "boxes.json");
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+
+        gsonBuilder.registerTypeAdapter(Double.class,  new JsonSerializer<Double>() {
+
+            @Override
+            public JsonElement serialize(Double src, Type typeOfSrc,
+                                         JsonSerializationContext context) {
+                Integer value = (int) Math.round(src);
+                return new JsonPrimitive(value);
+            }
+        });
+
+        gsonBuilder.registerTypeAdapter(Double.class,  new JsonDeserializer<Integer>() {
+
+            @Override
+            public Integer deserialize(JsonElement json, Type typeOfT,
+                                      JsonDeserializationContext context) throws JsonParseException {
+                return context.deserialize(json, Integer.class);
+            }
+        });
+
+        this.gson = gsonBuilder.create();
     }
 
     public boolean load() {
@@ -118,6 +141,13 @@ public class DataHandler {
     public Box getBox(String name) {
         if (this.boxes.containsKey(name)) {
             return this.boxes.get(name);
+        }
+        return null;
+    }
+
+    public Box getBoxAtLocation(Location location) {
+        if (this.boxExistsAtLocation(location)) {
+            return this.locations.get(location);
         }
         return null;
     }

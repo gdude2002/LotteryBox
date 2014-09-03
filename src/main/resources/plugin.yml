@@ -20,6 +20,10 @@ commands:
         description: Creates a lottery box
         usage: /<command> <name> [world] [x] [y] [z]
         permission: lotterybox.mkbox
+    mkkey:
+        description: Creates a box key
+        usage: /<command> [name]
+        permission: lotterybox.mkkey
     rmbox:
         description: Removes a lottery box
         usage: /<command> <name>
@@ -27,17 +31,31 @@ commands:
 
 permissions:
     lotterybox.*:
-        children:
-            - lotterybox.chbox
-            - lotterybox.lsbox
-            - lotterybox.mkbox
-            - lotterybox.rmbox
-        description: All the LotteryBox permissions
+            children:
+                - lotterybox.chbox
+                - lotterybox.lsbox
+                - lotterybox.mkbox
+                - lotterybox.mkkey
+                - lotterybox.rmbox
+                - lotterybox.open
+            description: All the LotteryBox permissions
+    lotterybox.admin:
+            children:
+                - lotterybox.chbox
+                - lotterybox.lsbox
+                - lotterybox.mkbox
+                - lotterybox.mkkey
+                - lotterybox.rmbox
+            description: All the LotteryBox admin commands
     lotterybox.chbox:
         description: Access the /chbox command
     lotterybox.lsbox:
         description: Access the /lsbox command
     lotterybox.mkbox:
         description: Access the /mkbox command
+    lotterybox.mkkey:
+        description: Access the /mkkey command
+    lotterybox.open:
+        description: Open lottery boxes
     lotterybox.rmbox:
         description: Access the /rmbox command

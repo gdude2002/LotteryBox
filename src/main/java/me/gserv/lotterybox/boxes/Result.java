@@ -6,31 +6,44 @@ public class Result {
 
     private final HashMap<String, Object> reward;
     private final boolean success;
-    private final Reason reason;
 
-    public Result() {
+    private final Reason reason;
+    private final String name;
+
+    public Result(String name) {
+        this.name = name;
         this.success = false;
         this.reward = null;
         this.reason = Reason.FAILED;
     }
 
-    public Result(Reason reason) {
+    public Result(String name, Reason reason) {
+        this.name = name;
         this.success = false;
         this.reward = null;
         this.reason = reason;
     }
 
-    public Result(Reason reason, HashMap<String, Object> reward) {
+    public Result(String name, Reason reason, HashMap<String, Object> reward) {
+        this.name = name;
         this.success = true;
         this.reward = reward;
         this.reason = reason;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public Reason getReason() {
+        return this.reason;
+    }
+
     public HashMap<String, Object> getReward() {
-        return reward;
+        return this.reward;
     }
 
     public boolean isSuccess() {
-        return success;
+        return this.success;
     }
 }

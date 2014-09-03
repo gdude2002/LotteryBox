@@ -300,6 +300,11 @@ public class ChBoxCommand implements CommandExecutor {
                             if ("hand".equalsIgnoreCase(value) && commandSender instanceof Player) {
                                 Player player = (Player) commandSender;
                                 item = player.getItemInHand();
+
+                                if (item == null || item.getType() == Material.AIR || item.getAmount() < 1) {
+                                    commandSender.sendMessage("You're not holding a valid item!");
+                                    return;
+                                }
                             } else {
                                 String[] parts = value.split(":");
                                 Material mat = Material.matchMaterial(parts[0]);
@@ -316,6 +321,11 @@ public class ChBoxCommand implements CommandExecutor {
                                             commandSender.sendMessage(String.format("%s is not a number, or is too large", parts[1]));
                                             return;
                                         }
+                                    }
+
+                                    if (amount < 1) {
+                                        commandSender.sendMessage("You need at least one item to give as a reward!");
+                                        return;
                                     }
 
                                     item = new ItemStack(mat, amount);

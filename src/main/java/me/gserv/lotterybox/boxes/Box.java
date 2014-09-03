@@ -207,31 +207,32 @@ public class Box {
 
     public Result use() {
         if ((!this.isInfinite()) && this.uses < 1) {
-            return new Result(Reason.OUT_OF_USES);
+            return new Result(null, Reason.OUT_OF_USES);
         }
 
         if (this.random.nextInt(this.chance) == 0) {
             ArrayList<String> rewards = new ArrayList<>();
 
             for (String key : this.rewards.keySet()) {
-                int chance = (int) this.rewards.get(key).get("chance");
+                Integer chance;
+                chance = (Integer) this.rewards.get(key).get("chance");
 
                 for (int i = 0; i < chance; i += 1) {
                     rewards.add(key);
                 }
             }
 
-            String reward_key = rewards.get(this.random.nextInt(rewards.size() - 1));
+            String reward_key = rewards.get(this.random.nextInt(rewards.size()));
             HashMap <String, Object> reward = this.rewards.get(reward_key);
 
             if (!this.isInfinite()) {
                 this.uses -= 1;
             }
 
-            return new Result(Reason.OK, reward);
+            return new Result(reward_key, Reason.OK, reward);
         }
 
-        return new Result(Reason.FAILED);
+        return new Result(null, Reason.FAILED);
     }
 
     public Location getLocation() {
