@@ -67,6 +67,7 @@ public final class LotteryBox extends JavaPlugin {
         }
 
         this.economy = new Economy(this);
+        this.economy.setup();
 
         return true;
     }
