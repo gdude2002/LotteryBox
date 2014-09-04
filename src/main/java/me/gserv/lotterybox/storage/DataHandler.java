@@ -41,6 +41,7 @@ public class DataHandler {
         this.fh = new File(this.plugin.getDataFolder() + "/boxes.json");
     }
 
+    @SuppressWarnings("unchecked")
     public boolean load() {
         if (!this.fh.exists()) {
             this.boxes = new HashMap<>();
