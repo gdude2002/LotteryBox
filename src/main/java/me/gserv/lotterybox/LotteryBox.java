@@ -6,20 +6,12 @@ package me.gserv.lotterybox;
  * This allows designation of chests as lottery boxes, which can be "opened" using "keys".
  */
 
-/*
-    TODO: High-level list of stuff
-
-    * Make item in hand a key
-    * Generate keys in dungeon chests
-    * Economy support?
-    * Prism support (if possible), because why the fuck not
-    * Permissions (obviously)
- */
-
 import me.gserv.lotterybox.commands.*;
+import me.gserv.lotterybox.economy.Economy;
 import me.gserv.lotterybox.listeners.InteractListener;
 import me.gserv.lotterybox.storage.ConfigHandler;
 import me.gserv.lotterybox.storage.DataHandler;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LotteryBox extends JavaPlugin {
@@ -38,12 +30,15 @@ public final class LotteryBox extends JavaPlugin {
     // Listener for chat events
     private InteractListener listener;
 
+    private Economy economy = null;
+
     @Override
     public void onEnable() {
         // Load up the config
         this.config = new ConfigHandler(this);
         this.data = new DataHandler(this);
 
+        this.setupEconomy();
         this.data.load();
 
         // Create command handlers
@@ -65,6 +60,26 @@ public final class LotteryBox extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(listener, this);
     }
 
+    private boolean setupEconomy() {
+        if (this.getServer().getPluginManager().getPlugin("Vault") == null) {
+            this.getLogger().warning("Unable to find the 'Vault' plugin. Money rewards will be unavailable.");
+            return false;
+        }
+
+        this.economy = new Economy(this);
+
+        return true;
+    }
+
+    public boolean addMoneyReward(Player player, int reward) {
+        if (this.economy == null) {
+            return false;
+        }
+
+        this.economy.addReward(player, reward);
+        return true;
+    }
+
     public void reload() {
         this.config.reload();
     }
@@ -75,5 +90,9 @@ public final class LotteryBox extends JavaPlugin {
 
     public ConfigHandler getConfigHandler() {
         return this.config;
+    }
+
+    public boolean hasEconomy() {
+        return this.economy != null;
     }
 }

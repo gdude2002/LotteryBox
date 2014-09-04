@@ -114,7 +114,23 @@ public class InteractListener implements Listener {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
                                 break;
                             case "money":
-                                // TODO: Vault
+                                int moneyReward = (Integer) reward.get("amount");
+                                boolean r = this.plugin.addMoneyReward(p, moneyReward);
+
+                                if (!r) {
+                                    p.sendMessage("Money rewards are unavailable, sorry!");
+                                    p.sendMessage(
+                                            String.format(
+                                                    "Please contact a staff member to claim your %s money reward.",
+                                                    moneyReward
+                                            )
+                                    );
+                                } else {
+                                    p.sendMessage(String.format(
+                                            "Congratulations! You've received money reward \"%s\" (%s)!",
+                                            result.getName(), moneyReward
+                                    ));
+                                }
                                 break;
                         }
                         break;

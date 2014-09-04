@@ -11,8 +11,10 @@ import org.bukkit.inventory.ItemStack;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 public class DataHandler {
 
@@ -53,7 +55,7 @@ public class DataHandler {
                 this.boxes = this.gson.fromJson(reader, this.token);
                 reader.close();
 
-                for (String key : this.boxes.keySet()) {
+                for (String key : new ArrayList<String>((Set) this.boxes.keySet())) {
                     this.boxes.get(key).fixRewards();
                     boolean result = this.addLocation(this.boxes.get(key));
 

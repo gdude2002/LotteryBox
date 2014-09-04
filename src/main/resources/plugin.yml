@@ -7,10 +7,12 @@ author: Gareth Coles
 main: me.gserv.lotterybox.LotteryBox
 database: false
 
+softdepend: [Vault]
+
 commands:
     chbox:
         description: Edits a lottery box
-        usage: /<command> <name>
+        usage: /<command> <name> <operation> [params]
         permission: lotterybox.chbox
     lsbox:
         description: Lists lottery boxes and gets information on them

@@ -223,10 +223,13 @@ public class ChBoxCommand implements CommandExecutor {
                             commandSender.sendMessage(String.format("Empty item reward %s with a chance of 0 added", rewardName));
                             commandSender.sendMessage("Remember to set the chance and reward value!");
                         } else if ("money".equalsIgnoreCase(type)) {
-                            // TODO: Check for Vault
-                            box.addMoneyReward(rewardName, 0, 0);
-                            commandSender.sendMessage(String.format("Empty money reward %s with a chance of 0 added", rewardName));
-                            commandSender.sendMessage("Remember to set the chance and reward value!");
+                            if (this.plugin.hasEconomy()) {
+                                box.addMoneyReward(rewardName, 0, 0);
+                                commandSender.sendMessage(String.format("Empty money reward %s with a chance of 0 added", rewardName));
+                                commandSender.sendMessage("Remember to set the chance and reward value!");
+                            } else {
+                                commandSender.sendMessage("Money rewards are unavailable - Vault plugin not found.");
+                            }
                         } else {
                             commandSender.sendMessage(String.format("Unknown reward type: %s", type));
                             commandSender.sendMessage("See /chbox help reward for more information.");
