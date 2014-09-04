@@ -67,9 +67,13 @@ public final class LotteryBox extends JavaPlugin {
         }
 
         this.economy = new Economy(this);
-        this.economy.setup();
+        boolean loaded = this.economy.setup();
 
-        return true;
+        if (!loaded) {
+            this.getLogger().warning("Unable to set up economy handler - Do you have an economy plugin installed?");
+        }
+
+        return loaded;
     }
 
     public boolean addMoneyReward(Player player, int reward) {
