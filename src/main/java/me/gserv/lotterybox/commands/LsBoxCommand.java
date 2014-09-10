@@ -31,14 +31,14 @@ public class LsBoxCommand implements CommandExecutor {
 
             hasPermission = true;
         } else if (! (commandSender instanceof Player)) {
-            commandSender.sendMessage("This plugin only supports commands from players, command blocks, and consoles.");
+            this.plugin.sendMessage(commandSender, "other.bad_sender");
             return true;
         } else {
             hasPermission = commandSender.hasPermission("lotterybox.lsbox");
         }
 
         if (!hasPermission) {
-            commandSender.sendMessage("You don't have permission to run this command.");
+            this.plugin.sendMessage(commandSender, "other.no_permission");
             return true;
         }
 

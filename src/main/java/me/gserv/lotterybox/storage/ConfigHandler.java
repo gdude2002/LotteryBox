@@ -55,4 +55,8 @@ public class ConfigHandler {
     public String getVersion() {
         return this.config.getString("version", "");
     }
+
+    public String getMessage(String message) {
+        return this.config.getString("messages.".concat(message));
+    }
 }

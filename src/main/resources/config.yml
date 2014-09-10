@@ -1,4 +1,66 @@
-# Empty configuration template
+# All messages support colour codes (Using the & symbol).
+# Leave one set to "" to disable it, but don't remove it from the file.
+
+# Prefix for all messages sent ingame.
+
+prefix: ""  # You don't need to include a space at the end
+
+# Configuration for most of the ingame messages
+
+messages:
+    chbox:
+        help:
+            header: "== /chbox help =="
+            more_info: "Use /chbox help <operation> for more information"
+            current_operation: "Operation: {OPERATION}"
+            see_more: "See /chbox help set for more information"
+        set:
+            chance_ok: "Chance for box {BOX} to dispense a reward is now {CHANCE}"
+            chance_fail: "{CHANCE} is not a number or is too large"
+            named_has: "Box {BOX} now requires named keys"
+            named_has_not: "Box {BOX} no longer requires named keys"
+            named_fail: "Unknown value: '{VALUE}' (expected named or all)"
+            uses_infinite: "Box {BOX} will now dispense infinite rewards"
+            uses_number: "Box {BOX} will now dispense {AMOUNT} rewards"
+            uses_fail: "{VALUE} is not 'infinite' or a number, or is too large"
+
+            unknown_option: "Unknown option: {OPTION}"
+        reward:
+            reward_exists: "Reward {REWARD} already exists"
+            reward_added: "Empty {TYPE} reward {NAME} with a chance of 0 added"
+            reward_removed: "Removed reward: {REWARD}"
+
+            chance_set: "Reward {REWARD} now has a {CHANCE} chance of being dispensed"
+            chance_fail: "{CHANCE} is not \"infinite\" or a number, or is too large"
+
+            command_set: "Invalid reward command specified!"
+            command_fail: "Reward command set: {COMMAND}"
+
+            bad_number: "{VALUE} is not a number, or is too large"
+
+            held_item_invalid: "You're not holding a valid item!"
+            item_set: "Item reward set: {AMOUNT} * {TYPE}"
+            low_item_amount: "You need at least one item to give as a reward!"
+            unknown_item: "Unknown item type: {TYPE}"
+
+            money_set: "Money reward set: {AMOUNT}"
+
+            reminder: "Remember to set the chance and reward value!"
+            no_economy: "Money rewards are unavailable - Vault plugin not found."
+            unknown_reward: "Unknown reward: {NAME}"
+            unknown_reward_type: "Unknown reward type: {TYPE}"
+    lsbox:
+
+    mkbox:
+
+    mkkey:
+
+    other:
+        bad_sender: "&6This plugin only supports commands from &cplayers&6, &ccommand blocks&6, and &cconsoles&6"
+        no_box: "No such box: {BOX}"
+        no_permission: "You don't have permission to fun this command"
+    rmbox:
+
 
 # Don't touch this, or you'll break things!
 version: 0.0.1

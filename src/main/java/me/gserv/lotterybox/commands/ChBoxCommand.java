@@ -29,20 +29,20 @@ public class ChBoxCommand implements CommandExecutor {
 
             hasPermission = true;
         } else if (! (commandSender instanceof Player)) {
-            commandSender.sendMessage("This plugin only supports commands from players, command blocks, and consoles.");
+            this.plugin.sendMessage(commandSender, "other.bad_sender");
             return true;
         } else {
             hasPermission = commandSender.hasPermission("lotterybox.chbox");
         }
 
         if (!hasPermission) {
-            commandSender.sendMessage("You don't have permission to run this command.");
+            this.plugin.sendMessage(commandSender, "other.no_permission");
             return true;
         }
 
         if (strings.length < 1) {
-            commandSender.sendMessage("Usage: /chbox <operation> [name] [params]");
-            commandSender.sendMessage("For more info, see /chbox help");
+            this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &a<operation> &d[name] [params]");
+            this.plugin.sendMessage(commandSender, "chbox.help.more_info");
             return true;
         }
 
@@ -59,8 +59,8 @@ public class ChBoxCommand implements CommandExecutor {
                 this.rewardCommand(commandSender, command, s, strings);
                 break;
             default:
-                commandSender.sendMessage(String.format("Unknown operation: %s", operation));
-                commandSender.sendMessage("For more info, see /chbox help");
+                this.plugin.sendColouredMessage(commandSender, String.format("&6Unknown operation: &c%s", operation));
+                this.plugin.sendMessage(commandSender, "chbox.help.more_info");
                 break;
         }
 
@@ -70,50 +70,60 @@ public class ChBoxCommand implements CommandExecutor {
     }
 
     public void helpCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        commandSender.sendMessage("== /chbox help ==");
+        this.plugin.sendMessage(commandSender, "chbox.help.header");
+        HashMap<String, String> args = new HashMap<>();
 
         if (strings.length < 2) {
-            commandSender.sendMessage("");
-            commandSender.sendMessage("Usage: /chbox <operation> [name] [params]");
-            commandSender.sendMessage("Operations: help, set, reward");
-            commandSender.sendMessage("Use /chbox help <operation> for more information");
+            this.plugin.sendColouredMessage(commandSender, "");
+            this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &a<operation> &d[name] [params]");
+            this.plugin.sendColouredMessage(commandSender, "&6Operations: &ahelp&6, &aset&6, &areward");
+            this.plugin.sendMessage(commandSender, "chbox.help.more_info");
         } else {
 
             String operation = strings[1];
 
             switch (operation) {
                 case "help":
-                    commandSender.sendMessage("Operation: help");
-                    commandSender.sendMessage("");
-                    commandSender.sendMessage("Usage: /chbox help [operation]");
-                    commandSender.sendMessage("You're using this right now!");
+                    args.clear();
+                    args.put("operation", "help");
+                    this.plugin.sendMessage(commandSender, "chbox.help.current_operation", args);
+
+                    this.plugin.sendColouredMessage(commandSender, "");
+                    this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &6help &a<operation>");
+                    this.plugin.sendColouredMessage(commandSender, "&6You're using this right now!");
                     break;
                 case "set":
-                    commandSender.sendMessage("Operation: set");
-                    commandSender.sendMessage("");
-                    commandSender.sendMessage("This is for setting options on specific boxes.");
-                    commandSender.sendMessage("Usage: /chbox set <name> <option> <value>");
-                    commandSender.sendMessage("");
-                    commandSender.sendMessage("/chbox set <name> chance <value> - Set overall chance for a box");
-                    commandSender.sendMessage("/chbox set <name> keys <named/all> - Set whether named keys will work");
-                    commandSender.sendMessage("/chbox set <name> uses <value/infinite> - Set how many times the box can dispense rewards");
+                    args.clear();
+                    args.put("operation", "set");
+                    this.plugin.sendMessage(commandSender, "chbox.help.current_operation", args);
+
+                    this.plugin.sendColouredMessage(commandSender, "");
+                    this.plugin.sendColouredMessage(commandSender, "&6This is for setting options on specific boxes.");
+                    this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &6set &a<name> <option> <value>");
+                    this.plugin.sendColouredMessage(commandSender, "");
+                    this.plugin.sendColouredMessage(commandSender, "&a/&cchbox &6set &a<name> &6chance &a<value> &c- &aSet overall chance for a box");
+                    this.plugin.sendColouredMessage(commandSender, "&a/&cchbox &6set &a<name> &6keys &a<named&c/&aall> &c- &aSet whether named keys will work");
+                    this.plugin.sendColouredMessage(commandSender, "&a/&cchbox &6set &a<name> &6uses &a<value&c/&ainfinite> &c- &aSet how many times the box can dispense rewards");
                     break;
                 case "reward":
-                    commandSender.sendMessage("Operation: reward");
-                    commandSender.sendMessage("");
-                    commandSender.sendMessage("Usage: /chbox reward <name> <operation> <reward name> [value]");
-                    commandSender.sendMessage("");
-                    commandSender.sendMessage("/chbox reward <name> add <reward name> <type> - Add a reward to a box");
-                    commandSender.sendMessage("/chbox reward <name> remove <reward name> - Remove a reward");
-                    commandSender.sendMessage("/chbox reward <name> chance <reward name> <value> - Set the relative chance of the reward");
-                    commandSender.sendMessage("/chbox reward <name> set <reward name> <value> - Set the reward item/amount/command");
-                    commandSender.sendMessage("");
-                    commandSender.sendMessage("Reward types: item, command, money");
-                    commandSender.sendMessage("Specifying items: \"hand\" or \"type[:amount]\"");
+                    args.clear();
+                    args.put("operation", "set");
+                    this.plugin.sendMessage(commandSender, "chbox.help.current_operation", args);
+
+                    this.plugin.sendColouredMessage(commandSender, "");
+                    this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &6reward &a<name> <operation> <reward name> &d[value]");
+                    this.plugin.sendColouredMessage(commandSender, "");
+                    this.plugin.sendColouredMessage(commandSender, "&a/&cchbox &6reward &a<name> &6add &a<reward name> <command/item/money> &c- &aAdd a reward to a box");
+                    this.plugin.sendColouredMessage(commandSender, "&a/&cchbox &6reward &a<name> &6remove &a<reward name> &c- &aRemove a reward");
+                    this.plugin.sendColouredMessage(commandSender, "&a/&cchbox &6reward &a<name> &6chance &a<reward name> <value> &c- &aSet the relative chance of the reward");
+                    this.plugin.sendColouredMessage(commandSender, "&a/&cchbox &6reward &a<name> &6set &a<reward name> <value> &c- &aSet the reward item/amount/command");
+                    this.plugin.sendColouredMessage(commandSender, "");
+                    this.plugin.sendColouredMessage(commandSender, "&6Reward types: &aitem&c, &acommand&c, &amoney");
+                    this.plugin.sendColouredMessage(commandSender, "&6Specifying items: &ahand &6or &atype[:amount]");
                     break;
                 default:
-                    commandSender.sendMessage(String.format("Unknown operation: %s", operation));
-                    commandSender.sendMessage("For more info, see /chbox help");
+                    this.plugin.sendColouredMessage(commandSender, String.format("&cUnknown operation: &6%s", operation));
+                    this.plugin.sendMessage(commandSender, "chbox.help.see_more");
                     break;
             }
         }
@@ -121,10 +131,11 @@ public class ChBoxCommand implements CommandExecutor {
 
     public void setCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (strings.length < 4) {
-            commandSender.sendMessage("Usage: /chbox set <name> <option> <value>");
-            commandSender.sendMessage("See /chbox help set for more information.");
+            this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &6set &a<name> <option> <value>");
+            this.plugin.sendMessage(commandSender, "chbox.help.see_more");
             return;
         }
+        HashMap<String, String> args = new HashMap<>();
 
         String name, option, value;
 
@@ -135,7 +146,9 @@ public class ChBoxCommand implements CommandExecutor {
         Box box = this.plugin.getDataHandler().getBox(name);
 
         if (box == null) {
-            commandSender.sendMessage(String.format("No such box: %s", name));
+            args.clear();
+            args.put("box", name);
+            this.plugin.sendMessage(commandSender, "other.no_box", args);
             return;
         }
 
@@ -144,51 +157,80 @@ public class ChBoxCommand implements CommandExecutor {
                 try {
                     int x = Integer.parseInt(value);
                     box.setChance(x);
-                    commandSender.sendMessage(String.format("Chance for box %s to dispense a reward is now %s", name, value));
+
+                    args.clear();
+                    args.put("box", box.name);
+                    args.put("chance", String.valueOf(x));
+                    this.plugin.sendMessage(commandSender, "chbox.set.chance_ok", args);
                 } catch (NumberFormatException e) {
-                    commandSender.sendMessage(String.format("%s is not a number or is too large", value));
+
+                    args.clear();
+                    args.put("value", value);
+                    this.plugin.sendMessage(commandSender, "chbox.set.chance_fail", args);
                 }
                 break;
             case "keys":
                 if ("named".equalsIgnoreCase(value)) {
                     box.setNamedKeys(true);
-                    commandSender.sendMessage(String.format("Box %s now requires named keys", name));
+
+                    args.clear();
+                    args.put("box", box.name);
+                    this.plugin.sendMessage(commandSender, "chbox.set.named_has", args);
                 } else if ("all".equalsIgnoreCase(value)) {
                     box.setNamedKeys(false);
-                    commandSender.sendMessage(String.format("Box %s no longer requires named keys", name));
+
+                    args.clear();
+                    args.put("box", box.name);
+                    this.plugin.sendMessage(commandSender, "chbox.set.named_has_not", args);
                 } else {
-                    commandSender.sendMessage(String.format("Unknown value: %s (expected named or all)", value));
+                    args.clear();
+                    args.put("value", value);
+                    this.plugin.sendMessage(commandSender, "chbox.set.named_fail", args);
                 }
                 break;
             case "uses":
                 if ("infinite".equalsIgnoreCase(value)) {
                     box.setUses(0);
                     box.setInfinite(true);
-                    commandSender.sendMessage(String.format("Box %s will now dispense infinite rewards", name));
+
+                    args.clear();
+                    args.put("box", box.name);
+                    this.plugin.sendMessage(commandSender, "chbox.set.uses_infinite", args);
                 } else {
                     try {
                         int x = Integer.parseInt(value);
                         box.setUses(x);
                         box.setInfinite(false);
-                        commandSender.sendMessage(String.format("Box %s will now dispense %s rewards", name, value));
+
+                        args.clear();
+                        args.put("box", box.name);
+                        args.put("amount", String.valueOf(x));
+                        this.plugin.sendMessage(commandSender, "chbox.set.uses_number", args);
                     } catch (NumberFormatException e) {
-                        commandSender.sendMessage(String.format("%s is not \"infinite\" or a number, or is too large", value));
+                        args.clear();
+                        args.put("value", value);
+                        this.plugin.sendMessage(commandSender, "chbox.set.uses_fail", args);
                     }
                 }
                 break;
             default:
-                commandSender.sendMessage(String.format("Unknown option: %s", option));
-                commandSender.sendMessage("See /chbox help set for more information.");
+                args.clear();
+                args.put("option", option);
+                this.plugin.sendMessage(commandSender, "chbox.set.unknown_option", args);
+
+                this.plugin.sendMessage(commandSender, "chbox.help.see_more");
                 break;
         }
     }
 
     public void rewardCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (strings.length < 4) {
-            commandSender.sendMessage("Usage: /chbox reward <name> <operation> <reward name> [value]");
-            commandSender.sendMessage("See /chbox help reward for more information.");
+            this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &6reward &a<name> <operation> <reward name> &d[value]");
+            this.plugin.sendMessage(commandSender, "chbox.help.see_more");
             return;
         }
+
+        HashMap<String, String> args = new HashMap<>();
 
         String name, operation, rewardName;
 
@@ -199,40 +241,62 @@ public class ChBoxCommand implements CommandExecutor {
         Box box = this.plugin.getDataHandler().getBox(name);
 
         if (box == null) {
-            commandSender.sendMessage(String.format("No such box: %s", name));
+            args.clear();
+            args.put("box", name);
+            this.plugin.sendMessage(commandSender, "other.no_box", args);
             return;
         }
 
         switch(operation.toLowerCase()) {
             case "add":
                 if (strings.length < 5) {
-                    commandSender.sendMessage("Usage: /chbox reward <name> add <reward name> <command/item/money>");
-                    commandSender.sendMessage("See /chbox help reward for more information.");
+                    this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &6reward &a<name> &6add &a<reward name> <command/item/money>");
+                    this.plugin.sendMessage(commandSender, "chbox.help.see_more");
                 } else {
                     if (box.hasReward(rewardName)) {
-                        commandSender.sendMessage(String.format("Reward %s already exists", rewardName));
+                        args.clear();
+                        args.put("reward", rewardName);
+                        this.plugin.sendMessage(commandSender, "chbox.reward.exists", args);
                     } else {
                         String type = strings[4];
 
                         if ("command".equalsIgnoreCase(type)) {
                             box.addCommandReward(rewardName, "", 0);
-                            commandSender.sendMessage(String.format("Empty command reward %s with a chance of 0 added", rewardName));
-                            commandSender.sendMessage("Remember to set the chance and reward value!");
+
+                            args.clear();
+                            args.put("name", rewardName);
+                            args.put("type", "command");
+
+                            this.plugin.sendMessage(commandSender, "chbox.reward.exists", args);
+                            this.plugin.sendMessage(commandSender, "chbox.reward.reminder");
                         } else if ("item".equalsIgnoreCase(type)) {
                             box.addItemReward(rewardName, new ItemStack(Material.AIR), 0);
-                            commandSender.sendMessage(String.format("Empty item reward %s with a chance of 0 added", rewardName));
-                            commandSender.sendMessage("Remember to set the chance and reward value!");
+
+                            args.clear();
+                            args.put("name", rewardName);
+                            args.put("type", "item");
+
+                            this.plugin.sendMessage(commandSender, "chbox.reward.exists", args);
+                            this.plugin.sendMessage(commandSender, "chbox.reward.reminder");
                         } else if ("money".equalsIgnoreCase(type)) {
                             if (this.plugin.hasEconomy()) {
                                 box.addMoneyReward(rewardName, 0, 0);
-                                commandSender.sendMessage(String.format("Empty money reward %s with a chance of 0 added", rewardName));
-                                commandSender.sendMessage("Remember to set the chance and reward value!");
+
+                                args.clear();
+                                args.put("name", rewardName);
+                                args.put("type", "money");
+
+                                this.plugin.sendMessage(commandSender, "chbox.reward.exists", args);
+                                this.plugin.sendMessage(commandSender, "chbox.reward.reminder");
                             } else {
-                                commandSender.sendMessage("Money rewards are unavailable - Vault plugin not found.");
+                                this.plugin.sendMessage(commandSender, "chbox.reward.no_economy");
                             }
                         } else {
-                            commandSender.sendMessage(String.format("Unknown reward type: %s", type));
-                            commandSender.sendMessage("See /chbox help reward for more information.");
+                            args.clear();
+                            args.put("type", type);
+
+                            this.plugin.sendMessage(commandSender, "chbox.reward.unknown_reward_type", args);
+                            this.plugin.sendMessage(commandSender, "chbox.help.see_more");
                         }
                     }
                 }
@@ -240,38 +304,59 @@ public class ChBoxCommand implements CommandExecutor {
             case "remove":
                 if (box.hasReward(rewardName)) {
                     box.removeReward(rewardName);
-                    commandSender.sendMessage(String.format("Removed reward: %s", rewardName));
+
+                    args.clear();
+                    args.put("reward", rewardName);
+
+                    this.plugin.sendMessage(commandSender, "chbox.reward.reward_removed", args);
                 } else {
-                    commandSender.sendMessage(String.format("Unknown reward: %s", rewardName));
+                    args.clear();
+                    args.put("name", rewardName);
+
+                    this.plugin.sendMessage(commandSender, "chbox.reward.unknown_reward", args);
                 }
                 break;
             case "chance":
                 if (strings.length < 5) {
-                    commandSender.sendMessage("Usage: /chbox reward <name> chance <reward name> <chance>");
-                    commandSender.sendMessage("See /chbox help reward for more information.");
+                    this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &6reward &a<name> &6chance &a<reward name> <value>");
+                    this.plugin.sendMessage(commandSender, "chbox.help.see_more");
                 } else {
                     if (!box.hasReward(rewardName)) {
-                        commandSender.sendMessage(String.format("Unknown reward: %s", rewardName));
+                        args.clear();
+                        args.put("name", rewardName);
+
+                        this.plugin.sendMessage(commandSender, "chbox.reward.unknown_reward", args);
                     } else {
                         String value = strings[4];
 
                         try {
                             int x = Integer.parseInt(value);
                             box.setRewardChance(rewardName, x);
-                            commandSender.sendMessage(String.format("Reward %s now has a %s chance of being dispensed", rewardName, x));
+
+                            args.clear();
+                            args.put("reward", rewardName);
+                            args.put("chance", String.valueOf(x));
+
+                            this.plugin.sendMessage(commandSender, "chbox.reward.chance_set", args);
                         } catch (NumberFormatException e) {
-                            commandSender.sendMessage(String.format("%s is not \"infinite\" or a number, or is too large", value));
+                            args.clear();
+                            args.put("chance", value);
+
+                            this.plugin.sendMessage(commandSender, "chbox.reward.chance_fail", args);
                         }
                     }
                 }
                 break;
             case "set":
                 if (strings.length < 5) {
-                    commandSender.sendMessage("Usage: /chbox reward <name> set <reward name> <value>");
-                    commandSender.sendMessage("See /chbox help reward for more information.");
+                    this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cchbox &6reward &a<name> &6set &a<reward name> <value>");
+                    this.plugin.sendMessage(commandSender, "chbox.help.see_more");
                 } else {
                     if (!box.hasReward(rewardName)) {
-                        commandSender.sendMessage(String.format("Unknown reward: %s", rewardName));
+                        args.clear();
+                        args.put("name", rewardName);
+
+                        this.plugin.sendMessage(commandSender, "chbox.reward.unknown_reward", args);
                     } else {
                         String value = "";
                         for (int i = 4; i < strings.length; i += 1) {
@@ -292,9 +377,12 @@ public class ChBoxCommand implements CommandExecutor {
                             r = box.setRewardValue(rewardName, value);
 
                             if (!r) {
-                                commandSender.sendMessage("Invalid reward command specified!");
+                                this.plugin.sendMessage(commandSender, "chbox.reward.command_fail");
                             } else {
-                                commandSender.sendMessage(String.format("Reward command set: %s", value));
+                                args.clear();
+                                args.put("command", value);
+
+                                this.plugin.sendMessage(commandSender, "chbox.reward.command_set", args);
                             }
 
                         } else if ("item".equalsIgnoreCase(type)) {
@@ -305,7 +393,7 @@ public class ChBoxCommand implements CommandExecutor {
                                 item = player.getItemInHand();
 
                                 if (item == null || item.getType() == Material.AIR || item.getAmount() < 1) {
-                                    commandSender.sendMessage("You're not holding a valid item!");
+                                    this.plugin.sendMessage(commandSender, "chbox.reward.held_item_invalid");
                                     return;
                                 }
                             } else {
@@ -314,20 +402,26 @@ public class ChBoxCommand implements CommandExecutor {
                                 int amount = 1;
 
                                 if (mat == null) {
-                                    commandSender.sendMessage(String.format("Unknown item type: %s", parts[0]));
+                                    args.clear();
+                                    args.put("type", parts[0]);
+
+                                    this.plugin.sendMessage(commandSender, "chbox.reward.unknown_item", args);
                                     return;
                                 } else {
                                     if (parts.length > 1) {
                                         try {
                                             amount = Integer.parseInt(parts[1]);
                                         } catch (NumberFormatException e) {
-                                            commandSender.sendMessage(String.format("%s is not a number, or is too large", parts[1]));
+                                            args.clear();
+                                            args.put("value", parts[1]);
+
+                                            this.plugin.sendMessage(commandSender, "chbox.reward.bad_number", args);
                                             return;
                                         }
                                     }
 
                                     if (amount < 1) {
-                                        commandSender.sendMessage("You need at least one item to give as a reward!");
+                                        this.plugin.sendMessage(commandSender, "chbox.reward.low_item_amount");
                                         return;
                                     }
 
@@ -336,7 +430,11 @@ public class ChBoxCommand implements CommandExecutor {
                             }
 
                             box.setRewardValue(rewardName, item);
-                            commandSender.sendMessage(String.format("Item reward set: %s %s(s)", item.getAmount(), item.getType().toString()));
+                            args.clear();
+                            args.put("amount", String.valueOf(item.getAmount()));
+                            args.put("type", item.getType().toString());
+
+                            this.plugin.sendMessage(commandSender, "chbox.reward.item_set", args);
 
                         } else if ("money".equalsIgnoreCase(type)) {
                             Integer x;
@@ -344,20 +442,29 @@ public class ChBoxCommand implements CommandExecutor {
                             try {
                                 x = Integer.parseInt(value);
                                 box.setRewardValue(rewardName, x);
-                                commandSender.sendMessage(String.format("Money reward set: %s", x));
+                                args.clear();
+                                args.put("value", String.valueOf(x));
+
+                                this.plugin.sendMessage(commandSender, "chbox.reward.money_set", args);
                             } catch (NumberFormatException e) {
-                                commandSender.sendMessage(String.format("%s is not a number, or is too large", value));
+                                args.clear();
+                                args.put("value", value);
+
+                                this.plugin.sendMessage(commandSender, "chbox.reward.bad_number", args);
                             }
 
                         } else {
-                            commandSender.sendMessage(String.format("Unknown type: %s - this should never happen", type));
+                            args.clear();
+                            args.put("name", rewardName);
+
+                            this.plugin.sendMessage(commandSender, "chbox.unknown_reward", args);
                         }
                     }
                 }
                 break;
             default:
-                commandSender.sendMessage(String.format("Unknown operation: %s", operation));
-                commandSender.sendMessage("See /chbox help reward for more information.");
+                this.plugin.sendColouredMessage(commandSender, String.format("&cUnknown operation: &6%s", operation));
+                this.plugin.sendMessage(commandSender, "chbox.help.see_more");
                 break;
         }
     }

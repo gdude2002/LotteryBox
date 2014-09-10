@@ -11,8 +11,13 @@ import me.gserv.lotterybox.economy.Economy;
 import me.gserv.lotterybox.listeners.InteractListener;
 import me.gserv.lotterybox.storage.ConfigHandler;
 import me.gserv.lotterybox.storage.DataHandler;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Map;
+
+import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
 public final class LotteryBox extends JavaPlugin {
 
@@ -99,5 +104,69 @@ public final class LotteryBox extends JavaPlugin {
 
     public boolean hasEconomy() {
         return this.economy != null;
+    }
+
+
+    /**
+     * Send a message to a player, where the message has been defined in the
+     * plugin's <code>config.yml</code>.
+     *
+     * <p>
+     *
+     * The <code>args</code> map is used to replace tokens in the message. For example..
+     *
+     * <p>
+     *
+     * <code>
+     *     Map<String, String> args = new HashMap<>();<br/>
+     *     args.put("PERMISSION", "my.awesome.permission");
+     * </code>
+     *
+     * <p>
+     *
+     * This will replace <code>"{PERMISSION}"</code> in the message with
+     * <code>"my.awesome.permission"</code>.
+     *
+     * @param player The CommandSender (Console or Player) to send the message to.
+     * @param message The name of the message, as configured in <code>config.yml</code>.
+     * @param args A Map of arguments that will be replacing tokens in the message itself.
+     */
+    public void sendMessage(CommandSender player, String message, Map<String, String> args) {
+        String msg = this.getConfigHandler().getMessage(message);
+
+        if (msg == null) {
+            this.sendColouredMessage(player, String.format("&cUnknown or missing message: &6%s", message));
+            this.sendColouredMessage(player, "&cPlease notify the server owner so that they may fix this.");
+            this.sendColouredMessage(player, "&cIf you just ran a command, this message doesn't necessarily mean it didn't complete!");
+
+            this.getLogger().warning(String.format("Unknown or missing message: %s", message));
+            this.getLogger().warning(String.format("Please check your configuration and make sure messages.%s exists!", message));
+            this.getLogger().warning("If you're sure you configured Painter properly, then please report this to the BukkitDev page.");
+            return;
+        }
+
+        if (msg.isEmpty()) {
+            return;
+        }
+
+        if (args != null) {
+            // Not all messages have tokens
+            for (String key : args.keySet()) {
+                String origKey = key;
+                key = key.toUpperCase();
+                key = String.format("{%s}", key);
+
+                msg = msg.replace(key, args.get(origKey));
+            }
+        }
+        this.sendColouredMessage(player, msg);
+    }
+
+    public void sendMessage(CommandSender player, String message) {
+        this.sendMessage(player, message, null);
+    }
+
+    public void sendColouredMessage(CommandSender player, String message) {
+        player.sendMessage(translateAlternateColorCodes('&', message));
     }
 }
