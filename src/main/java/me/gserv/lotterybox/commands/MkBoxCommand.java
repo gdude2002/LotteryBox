@@ -10,6 +10,8 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
+import java.util.HashMap;
+
 public class MkBoxCommand implements CommandExecutor {
     private final LotteryBox plugin;
 
@@ -22,13 +24,14 @@ public class MkBoxCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         // /mkbox <name> [world] [x] [y] [z]
 
+        HashMap<String, String> args = new HashMap<>();
+
         boolean hasPermission;
 
         if (commandSender instanceof ConsoleCommandSender) {
             hasPermission = true;
 
             if(strings.length < 5) {
-                commandSender.sendMessage("/mkbox - Create a lottery box");
                 commandSender.sendMessage("Console usage: mkbox <name> <world> <x> <y> <z>");
                 return true;
             }
@@ -50,7 +53,6 @@ public class MkBoxCommand implements CommandExecutor {
             hasPermission = true;
 
             if(strings.length < 5) {
-                commandSender.sendMessage("/mkbox - Create a lottery box");
                 commandSender.sendMessage("RCON usage: mkbox <name> <world> <x> <y> <z>");
                 return true;
             }
@@ -61,14 +63,13 @@ public class MkBoxCommand implements CommandExecutor {
             hasPermission = commandSender.hasPermission("lotterybox.mkbox");
 
             if (strings.length < 1) {
-                commandSender.sendMessage("/mkbox - Create a lottery box");
-                commandSender.sendMessage("Usage: /mkbox <name> [world] [x] [y] [z]");
+                commandSender.sendMessage("&6Usage: &a/&cmkbox &a<name> &d[world] [x] [y] [z]");
                 return true;
             }
         }
 
         if (!hasPermission) {
-            commandSender.sendMessage("You don't have permission to run this command.");
+            this.plugin.sendMessage(commandSender, "other.no_permission");
             return true;
         }
 
@@ -81,28 +82,36 @@ public class MkBoxCommand implements CommandExecutor {
             int x, y, z;
 
             if (world == null) {
-                commandSender.sendMessage(String.format("No such world: %s", strings[1]));
+                args.clear();
+                args.put("world", strings[1]);
+                this.plugin.sendMessage(commandSender, "mkbox.no_world", args);
                 return true;
             }
 
             try {
                 x = Integer.parseInt(strings[2]);
             } catch (NumberFormatException e) {
-                commandSender.sendMessage(String.format("%s is not a number", strings[2]));
+                args.clear();
+                args.put("value", strings[2]);
+                this.plugin.sendMessage(commandSender, "other.nan", args);
                 return true;
             }
 
             try {
                 y = Integer.parseInt(strings[3]);
             } catch (NumberFormatException e) {
-                commandSender.sendMessage(String.format("%s is not a number", strings[3]));
+                args.clear();
+                args.put("value", strings[3]);
+                this.plugin.sendMessage(commandSender, "other.nan", args);
                 return true;
             }
 
             try {
                 z = Integer.parseInt(strings[4]);
             } catch (NumberFormatException e) {
-                commandSender.sendMessage(String.format("%s is not a number", strings[4]));
+                args.clear();
+                args.put("value", strings[4]);
+                this.plugin.sendMessage(commandSender, "other.nan", args);
                 return true;
             }
 
@@ -110,7 +119,7 @@ public class MkBoxCommand implements CommandExecutor {
             Block block = location.getBlock();
 
             if (block == null || !(block.getType() == Material.CHEST)) {
-                commandSender.sendMessage("This block isn't a chest.");
+                this.plugin.sendMessage(commandSender, "mkbox.not_chest");
                 return true;
             }
         } else {
@@ -118,29 +127,32 @@ public class MkBoxCommand implements CommandExecutor {
             Block block = player.getTargetBlock(null, 100);
 
             if (block == null || !(block.getType() == Material.CHEST)) {
-                commandSender.sendMessage("Please look at a chest. Perhaps you're not close enough?");
+                this.plugin.sendMessage(commandSender, "mkbox.look_at_chest");
                 return true;
             }
 
             location = block.getLocation();
         }
 
+        args.clear();
+        args.put("box", strings[0]);
+
         if (this.plugin.getDataHandler().boxExists(strings[0])) {
-            commandSender.sendMessage(String.format("There's already a box named %s", strings[0]));
+            this.plugin.sendMessage(commandSender, "mkbox.already_box_named", args);
             return true;
         }
 
         if (this.plugin.getDataHandler().boxExistsAtLocation(location)) {
-            commandSender.sendMessage("A box already exists at this location");
+            this.plugin.sendMessage(commandSender, "mkbox.already_box_location");
             return true;
         }
 
         if (!this.plugin.getDataHandler().addBox(strings[0], location)) {
-            commandSender.sendMessage("Failed to create box, please check the console");
+            this.plugin.sendMessage(commandSender, "mkbox.box_creation_failed");
             return true;
         }
 
-        commandSender.sendMessage(String.format("Created box: %s", strings[0]));
+        this.plugin.sendMessage(commandSender, "mkbox.box_created", args);
         return true;
     }
 }

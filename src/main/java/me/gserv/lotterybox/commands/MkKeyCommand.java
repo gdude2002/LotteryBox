@@ -7,6 +7,8 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+
 public class MkKeyCommand implements CommandExecutor {
     private final LotteryBox plugin;
 
@@ -18,17 +20,19 @@ public class MkKeyCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         // /rmbox <name>
 
+        HashMap<String, String> args = new HashMap<>();
+
         boolean hasPermission;
 
         if (! (commandSender instanceof Player)) {
-            commandSender.sendMessage("This command may only be used by players.");
+            this.plugin.sendMessage(commandSender, "mkkey.players_only");
             return true;
         } else {
             hasPermission = commandSender.hasPermission("lotterybox.mkkey");
         }
 
         if (!hasPermission) {
-            commandSender.sendMessage("You don't have permission to run this command.");
+            this.plugin.sendMessage(commandSender, "other.no_permission");
             return true;
         }
 
@@ -37,23 +41,26 @@ public class MkKeyCommand implements CommandExecutor {
         ItemStack item = p.getItemInHand();
 
         if (item == null || item.getType() == Material.AIR) {
-            p.sendMessage("You're not holding an item to turn into a key!");
+            this.plugin.sendMessage(commandSender, "mkkey.hold_item");
             return true;
         }
 
         if (strings.length < 1) {
             Keys.makeKey(item);
-            p.sendMessage("Item has been turned into a generic key.");
+            this.plugin.sendMessage(commandSender, "mkkey.generic_key");
         } else {
             String name = strings[0];
 
+            args.clear();
+            args.put("box", name);
+
             if (!this.plugin.getDataHandler().boxExists(name)) {
-                commandSender.sendMessage(String.format("No such box: %s", name));
+                this.plugin.sendMessage(commandSender, "other.no_box", args);
                 return true;
             }
 
             Keys.makeKey(item, name);
-            p.sendMessage(String.format("Item has been turned into a box key for %s", name));
+            this.plugin.sendMessage(commandSender, "mkkey.specific_key", args);
         }
 
         return true;

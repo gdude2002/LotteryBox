@@ -68,9 +68,22 @@ messages:
         command_reward: "[Command] {REWARD} ({CHANCE} chance) - {COMMAND}"
         money_reward: "[Item] {REWARD} ({CHANCE} chance) - {SIGN}{AMOUNT}"  # Sign is + if the amount is positive or 0
     mkbox:
+        no_world: "No such world: {WORLD}"
 
+        not_chest: "This block isn't a chest"
+        look_at_chest: "Please look at a chest. Perhaps you're not close enough?"
+
+        already_box_named: "There's already a box named {BOX}"
+        already_box_location: "A box already exists at this location"
+        box_creation_failed: "Failed to create box - please check the console"
+
+        box_created: "Created box: {BOX}"
     mkkey:
+        players_only: "This command may only be used by players"
+        hold_item: "You're not holding an item to turn into a key!"
 
+        generic_key: "Item has been turned into a generic key"
+        specific_key: "Item has been turned into a box key for {BOX}"
     other:
         bad_sender: "&6This plugin only supports commands from &cplayers&6, &ccommand blocks&6, and &cconsoles&6"
         no_box: "No such box: {BOX}"
