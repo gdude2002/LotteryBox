@@ -3,7 +3,7 @@
 
 # Prefix for all messages sent ingame.
 
-prefix: ""  # You don't need to include a space at the end
+prefix: "&6[&aLotteryBox&6]&f"  # You don't need to include a space at the end
 
 # Configuration for most of the ingame messages
 
