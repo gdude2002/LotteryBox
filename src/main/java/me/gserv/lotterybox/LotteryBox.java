@@ -41,6 +41,9 @@ public final class LotteryBox extends JavaPlugin {
     public void onEnable() {
         // Load up the config
         this.config = new ConfigHandler(this);
+        this.config.update();
+
+        // Load up the boxes too
         this.data = new DataHandler(this);
 
         this.setupEconomy();
