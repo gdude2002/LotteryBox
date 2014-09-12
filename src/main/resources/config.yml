@@ -91,7 +91,7 @@ messages:
         no_permission: "You don't have permission to fun this command"
         nan: "{VALUE} is not a number"
     rmbox:
-        removed: "Box removed: }BOX}"
+        removed: "Box removed: {BOX}"
         error: "Failed to remove box - please check the console"
 
 # Don't touch this, or you'll break things!
