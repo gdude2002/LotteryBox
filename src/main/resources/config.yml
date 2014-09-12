@@ -50,7 +50,23 @@ messages:
             unknown_reward: "Unknown reward: {NAME}"
             unknown_reward_type: "Unknown reward type: {TYPE}"
     lsbox:
+        box_entry: "{NAME} [{WORLD} - {X}, {Y}, {Z}] - chance: {CHANCE}"
 
+        box_header: "== {BOX} =="
+        box_location: "Location: {WORLD} - {X}, {Y}, {Z}"
+        box_chance: "Chance: {CHANCE}"
+        box_uses: "Uses: {USES}"
+        box_rewards_count: "Rewards: {COUNT}"
+
+        box_named_keys: "== Requires named keys =="
+        box_any_keys: "== Can use any key =="
+
+        rewards_header: "== Rewards: {BOX} =="
+        no_rewards: "No rewards found"
+
+        item_reward: "[Item] {REWARD} ({CHANCE} chance) - {AMOUNT} {TYPE}(s)"
+        command_reward: "[Command] {REWARD} ({CHANCE} chance) - {COMMAND}"
+        money_reward: "[Item] {REWARD} ({CHANCE} chance) - {SIGN}{AMOUNT}"  # Sign is + if the amount is positive or 0
     mkbox:
 
     mkkey:
@@ -58,6 +74,7 @@ messages:
     other:
         bad_sender: "&6This plugin only supports commands from &cplayers&6, &ccommand blocks&6, and &cconsoles&6"
         no_box: "No such box: {BOX}"
+        no_boxes: "No boxes found"
         no_permission: "You don't have permission to fun this command"
     rmbox:
 
