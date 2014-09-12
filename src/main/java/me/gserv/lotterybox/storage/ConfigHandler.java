@@ -4,6 +4,8 @@ import me.gserv.lotterybox.LotteryBox;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class ConfigHandler {
 
@@ -32,6 +34,20 @@ public class ConfigHandler {
                 this.reload();
                 break;
             case "0.0.1":
+                // Beta - wipe it.
+                this.plugin.getLogger().warning(
+                        "As you're upgrading from the 0.0.1 dev builds, I'm going to have to wipe your config. Sorry!"
+                );
+                try {
+                    Files.delete((new File(this.plugin.getDataFolder(), "config.yml")).toPath());
+                    this.plugin.saveDefaultConfig();
+                } catch (IOException e) {
+                    this.plugin.getLogger().warning("Unable to replace old config!");
+                    e.printStackTrace();
+                }
+
+                break;
+            case "0.0.2":
                 // Correct version
                 break;
             default:

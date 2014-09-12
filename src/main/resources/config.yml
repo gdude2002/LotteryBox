@@ -95,4 +95,4 @@ messages:
         error: "Failed to remove box - please check the console"
 
 # Don't touch this, or you'll break things!
-version: 0.0.1
+version: 0.0.2
