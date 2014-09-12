@@ -26,28 +26,28 @@ public class RmBoxCommand implements CommandExecutor {
             hasPermission = true;
 
             if(strings.length < 1) {
-                commandSender.sendMessage("Console usage: rmbox <name>");
+                this.plugin.sendColouredMessage(commandSender, "Console usage: rmbox <name>");
                 return true;
             }
         } else if (commandSender instanceof BlockCommandSender) {
             hasPermission = true;
 
             if(strings.length < 1) {
-                commandSender.sendMessage("Command block usage: /rmbox <name>");
+                this.plugin.sendColouredMessage(commandSender, "Command block usage: /rmbox <name>");
                 return true;
             }
         } else if (commandSender instanceof CommandMinecart) {
             hasPermission = true;
 
             if(strings.length < 1) {
-                commandSender.sendMessage("Command minecart usage: /rmbox <name>");
+                this.plugin.sendColouredMessage(commandSender, "Command minecart usage: /rmbox <name>");
                 return true;
             }
         } else if (commandSender instanceof RemoteConsoleCommandSender) {
             hasPermission = true;
 
             if(strings.length < 1) {
-                commandSender.sendMessage("RCON usage: rmbox <name>");
+                this.plugin.sendColouredMessage(commandSender, "RCON usage: rmbox <name>");
                 return true;
             }
         } else if (! (commandSender instanceof Player)) {

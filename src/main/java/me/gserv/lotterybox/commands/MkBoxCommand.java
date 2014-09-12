@@ -32,38 +32,38 @@ public class MkBoxCommand implements CommandExecutor {
             hasPermission = true;
 
             if(strings.length < 5) {
-                commandSender.sendMessage("Console usage: mkbox <name> <world> <x> <y> <z>");
+                this.plugin.sendColouredMessage(commandSender, "Console usage: mkbox <name> <world> <x> <y> <z>");
                 return true;
             }
         } else if (commandSender instanceof BlockCommandSender) {
             hasPermission = true;
 
             if(strings.length < 5) {
-                commandSender.sendMessage("Command block usage: /mkbox <name> <world> <x> <y> <z>");
+                this.plugin.sendColouredMessage(commandSender, "Command block usage: /mkbox <name> <world> <x> <y> <z>");
                 return true;
             }
         } else if (commandSender instanceof CommandMinecart) {
             hasPermission = true;
 
             if(strings.length < 5) {
-                commandSender.sendMessage("Command minecart usage: /mkbox <name> <world> <x> <y> <z>");
+                this.plugin.sendColouredMessage(commandSender, "Command minecart usage: /mkbox <name> <world> <x> <y> <z>");
                 return true;
             }
         } else if (commandSender instanceof RemoteConsoleCommandSender) {
             hasPermission = true;
 
             if(strings.length < 5) {
-                commandSender.sendMessage("RCON usage: mkbox <name> <world> <x> <y> <z>");
+                this.plugin.sendColouredMessage(commandSender, "RCON usage: mkbox <name> <world> <x> <y> <z>");
                 return true;
             }
         } else if (! (commandSender instanceof Player)) {
-            commandSender.sendMessage("This plugin only supports commands from players, command blocks, and consoles.");
+            this.plugin.sendColouredMessage(commandSender, "This plugin only supports commands from players, command blocks, and consoles.");
             return true;
         } else {
             hasPermission = commandSender.hasPermission("lotterybox.mkbox");
 
             if (strings.length < 1) {
-                commandSender.sendMessage("&6Usage: &a/&cmkbox &a<name> &d[world] [x] [y] [z]");
+                this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&cmkbox &a<name> &d[world] [x] [y] [z]");
                 return true;
             }
         }
