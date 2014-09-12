@@ -23,7 +23,7 @@ public class LsBoxCommand implements CommandExecutor {
         // /lsbox [name] ["rewards"]
 
         HashMap <String, String> args = new HashMap<>();
-        boolean hasPermission = false;
+        boolean hasPermission;
 
         if (commandSender instanceof ConsoleCommandSender ||
             commandSender instanceof BlockCommandSender ||

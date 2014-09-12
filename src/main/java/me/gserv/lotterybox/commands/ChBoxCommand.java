@@ -20,7 +20,7 @@ public class ChBoxCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         // /chbox <operation> [name] [params]
-        boolean hasPermission = false;
+        boolean hasPermission;
 
         if (commandSender instanceof ConsoleCommandSender ||
                 commandSender instanceof BlockCommandSender ||

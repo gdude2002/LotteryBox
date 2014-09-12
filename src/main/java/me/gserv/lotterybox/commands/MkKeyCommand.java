@@ -5,7 +5,6 @@ import me.gserv.lotterybox.boxes.Keys;
 import org.bukkit.Material;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.minecart.CommandMinecart;
 import org.bukkit.inventory.ItemStack;
 
 public class MkKeyCommand implements CommandExecutor {
@@ -19,7 +18,7 @@ public class MkKeyCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         // /rmbox <name>
 
-        boolean hasPermission = false;
+        boolean hasPermission;
 
         if (! (commandSender instanceof Player)) {
             commandSender.sendMessage("This command may only be used by players.");

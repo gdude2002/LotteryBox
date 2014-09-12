@@ -16,7 +16,7 @@ public class RmBoxCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         // /rmbox <name>
 
-        boolean hasPermission = false;
+        boolean hasPermission;
 
         if (commandSender instanceof ConsoleCommandSender) {
             hasPermission = true;

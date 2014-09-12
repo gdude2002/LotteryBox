@@ -6,9 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.command.*;
-import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
@@ -24,7 +22,7 @@ public class MkBoxCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         // /mkbox <name> [world] [x] [y] [z]
 
-        boolean hasPermission = false;
+        boolean hasPermission;
 
         if (commandSender instanceof ConsoleCommandSender) {
             hasPermission = true;
