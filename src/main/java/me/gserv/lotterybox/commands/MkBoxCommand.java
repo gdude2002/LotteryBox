@@ -32,7 +32,7 @@ public class MkBoxCommand implements CommandExecutor {
             hasPermission = true;
 
             if(strings.length < 5) {
-                this.plugin.sendColouredMessage(commandSender, "Console usage: mkbox <name> <world> <x> <y> <z>");
+                this.plugin.sendColouredMessage(commandSender, "&6Usage: &cmkbox &a<name> &d[world] [x] [y] [z]");
                 return true;
             }
         } else if (commandSender instanceof BlockCommandSender) {
@@ -53,7 +53,7 @@ public class MkBoxCommand implements CommandExecutor {
             hasPermission = true;
 
             if(strings.length < 5) {
-                this.plugin.sendColouredMessage(commandSender, "RCON usage: mkbox <name> <world> <x> <y> <z>");
+                this.plugin.sendColouredMessage(commandSender, "&6Usage: &cmkbox &a<name> &d[world] [x] [y] [z]");
                 return true;
             }
         } else if (! (commandSender instanceof Player)) {

@@ -26,7 +26,7 @@ public class RmBoxCommand implements CommandExecutor {
             hasPermission = true;
 
             if(strings.length < 1) {
-                this.plugin.sendColouredMessage(commandSender, "Console usage: rmbox <name>");
+                this.plugin.sendColouredMessage(commandSender, "&6Usage: &crmbox &a<name>");
                 return true;
             }
         } else if (commandSender instanceof BlockCommandSender) {
@@ -47,7 +47,7 @@ public class RmBoxCommand implements CommandExecutor {
             hasPermission = true;
 
             if(strings.length < 1) {
-                this.plugin.sendColouredMessage(commandSender, "RCON usage: rmbox <name>");
+                this.plugin.sendColouredMessage(commandSender, "&6Usage: &crmbox &a<name>");
                 return true;
             }
         } else if (! (commandSender instanceof Player)) {
