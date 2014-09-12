@@ -75,4 +75,8 @@ public class ConfigHandler {
     public String getMessage(String message) {
         return this.config.getString("messages.".concat(message));
     }
+
+    public String getMessagePrefix() {
+        return this.config.getString("prefix");
+    }
 }

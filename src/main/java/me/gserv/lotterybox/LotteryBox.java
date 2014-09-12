@@ -170,6 +170,12 @@ public final class LotteryBox extends JavaPlugin {
     }
 
     public void sendColouredMessage(CommandSender player, String message) {
+        String prefix = this.config.getMessagePrefix();
+
+        if (!prefix.isEmpty()) {
+            message = String.format("%s %s", prefix, message);
+        }
+
         player.sendMessage(translateAlternateColorCodes('&', message));
     }
 }
