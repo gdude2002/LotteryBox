@@ -5,6 +5,8 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
+import java.util.HashMap;
+
 public class RmBoxCommand implements CommandExecutor {
     private final LotteryBox plugin;
 
@@ -16,13 +18,14 @@ public class RmBoxCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         // /rmbox <name>
 
+        HashMap<String, String> args = new HashMap<>();
+
         boolean hasPermission;
 
         if (commandSender instanceof ConsoleCommandSender) {
             hasPermission = true;
 
             if(strings.length < 1) {
-                commandSender.sendMessage("/rmbox - Remove a lottery box");
                 commandSender.sendMessage("Console usage: rmbox <name>");
                 return true;
             }
@@ -44,39 +47,40 @@ public class RmBoxCommand implements CommandExecutor {
             hasPermission = true;
 
             if(strings.length < 1) {
-                commandSender.sendMessage("/rmbox - Remove a lottery box");
                 commandSender.sendMessage("RCON usage: rmbox <name>");
                 return true;
             }
         } else if (! (commandSender instanceof Player)) {
-            commandSender.sendMessage("This plugin only supports commands from players, command blocks, and consoles.");
+            this.plugin.sendMessage(commandSender, "other.bad_sender");
             return true;
         } else {
             hasPermission = commandSender.hasPermission("lotterybox.rmbox");
 
             if (strings.length < 1) {
-                commandSender.sendMessage("/rmbox - Remove a lottery box");
-                commandSender.sendMessage("Usage: /rmbox <name>");
+                this.plugin.sendColouredMessage(commandSender, "&6Usage: &a/&crmbox &a<name>");
                 return true;
             }
         }
 
         if (!hasPermission) {
-            commandSender.sendMessage("You don't have permission to run this command.");
+            this.plugin.sendMessage(commandSender, "other.no_permission");
             return true;
         }
 
+        args.clear();
+        args.put("box", strings[0]);
+
         if (!this.plugin.getDataHandler().boxExists(strings[0])) {
-            commandSender.sendMessage(String.format("No such box: %s", strings[0]));
+            this.plugin.sendMessage(commandSender, "other.no_box", args);
             return true;
         }
 
         if (!this.plugin.getDataHandler().removeBox(strings[0])) {
-            commandSender.sendMessage("Failed to remove box, please check the console");
+            this.plugin.sendMessage(commandSender, "rmbox.error");
             return true;
         }
 
-        commandSender.sendMessage(String.format("Box removed: %s", strings[0]));
+        this.plugin.sendMessage(commandSender, "rmbox.removed", args);
         return true;
     }
 }
