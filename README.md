@@ -24,13 +24,7 @@ Remember, your server must be running **Java 7 or later**. If you need me to com
 Things to do
 ============
 
-* Chest data storage in json format
-* Permissions support
-* Ingame management
-* Turning any held item into a key
-* Chest-specific keys, chest-agnostic keys
 * Adding chest keys to dungeon chest generation
-* Optional support for item, command and soft currency (ingame money) rewards
 * Probably some other stuff I forgot.
 
 Compiling
