@@ -18,7 +18,7 @@ public class MkKeyCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        // /rmbox <name>
+        // /mkkey [name]
 
         HashMap<String, String> args = new HashMap<>();
 

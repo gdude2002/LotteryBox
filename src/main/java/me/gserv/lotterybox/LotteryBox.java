@@ -27,6 +27,7 @@ public final class LotteryBox extends JavaPlugin {
 
     // Commands
     private ChBoxCommand chBoxCommand;
+    private GiveKeyCommand giveKeyCommand;
     private LsBoxCommand lsBoxCommand;
     private MkBoxCommand mkBoxcommand;
     private MkKeyCommand mkKeyCommand;
@@ -51,6 +52,7 @@ public final class LotteryBox extends JavaPlugin {
 
         // Create command handlers
         this.chBoxCommand = new ChBoxCommand(this);
+        this.giveKeyCommand = new GiveKeyCommand(this);
         this.lsBoxCommand = new LsBoxCommand(this);
         this.mkBoxcommand = new MkBoxCommand(this);
         this.mkKeyCommand = new MkKeyCommand(this);
@@ -58,6 +60,7 @@ public final class LotteryBox extends JavaPlugin {
 
         // Register command handlers
         this.getCommand("chbox").setExecutor(this.chBoxCommand);
+        this.getCommand("givekey").setExecutor(this.giveKeyCommand);
         this.getCommand("lsbox").setExecutor(this.lsBoxCommand);
         this.getCommand("mkbox").setExecutor(this.mkBoxcommand);
         this.getCommand("mkkey").setExecutor(this.mkKeyCommand);
@@ -131,19 +134,19 @@ public final class LotteryBox extends JavaPlugin {
      * <code>"my.awesome.permission"</code>.
      *
      * @param player The CommandSender (Console or Player) to send the message to.
-     * @param message The name of the message, as configured in <code>config.yml</code>.
+     * @param messageID The name of the message, as configured in <code>config.yml</code>.
      * @param args A Map of arguments that will be replacing tokens in the message itself.
      */
-    public void sendMessage(CommandSender player, String message, Map<String, String> args) {
-        String msg = this.getConfigHandler().getMessage(message);
+    public void sendMessage(CommandSender player, String messageID, Map<String, String> args) {
+        String msg = this.getConfigHandler().getMessage(messageID);
 
         if (msg == null) {
-            this.sendColouredMessage(player, String.format("&cUnknown or missing message: &6%s", message));
+            this.sendColouredMessage(player, String.format("&cUnknown or missing message: &6%s", messageID));
             this.sendColouredMessage(player, "&cPlease notify the server owner so that they may fix this.");
             this.sendColouredMessage(player, "&cIf you just ran a command, this message doesn't necessarily mean it didn't complete!");
 
-            this.getLogger().warning(String.format("Unknown or missing message: %s", message));
-            this.getLogger().warning(String.format("Please check your configuration and make sure messages.%s exists!", message));
+            this.getLogger().warning(String.format("Unknown or missing message: %s", messageID));
+            this.getLogger().warning(String.format("Please check your configuration and make sure messages.%s exists!", messageID));
             this.getLogger().warning("If you're sure you configured Painter properly, then please report this to the BukkitDev page.");
             return;
         }
@@ -165,8 +168,8 @@ public final class LotteryBox extends JavaPlugin {
         this.sendColouredMessage(player, msg);
     }
 
-    public void sendMessage(CommandSender player, String message) {
-        this.sendMessage(player, message, null);
+    public void sendMessage(CommandSender player, String messageID) {
+        this.sendMessage(player, messageID, null);
     }
 
     public void sendColouredMessage(CommandSender player, String message) {

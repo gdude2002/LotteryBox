@@ -93,6 +93,12 @@ messages:
     rmbox:
         removed: "Box removed: {BOX}"
         error: "Failed to remove box - please check the console"
+    givekey:
+        player_offline: "No such player: {PLAYER}"
+        invalid_item: "Invalid item: {ITEM}"
+        item_must_not_be_air: "Item must not be air"
+
+        message_to_player: "You've been given a key!"
 
 # Don't touch this, or you'll break things!
-version: 0.0.2
+version: 0.0.3

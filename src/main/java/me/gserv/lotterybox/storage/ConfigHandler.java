@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
 
 public class ConfigHandler {
 
@@ -41,13 +42,27 @@ public class ConfigHandler {
                 try {
                     Files.delete((new File(this.plugin.getDataFolder(), "config.yml")).toPath());
                     this.plugin.saveDefaultConfig();
+                    this.reload();
+                    this.plugin.getLogger().info("Config updated to 0.0.2 (Message customization)");
                 } catch (IOException e) {
                     this.plugin.getLogger().warning("Unable to replace old config!");
                     e.printStackTrace();
                 }
-
-                break;
             case "0.0.2":
+                // Additional messages for /givekey
+                this.config.set("messages.givekey", new HashMap<String, String>());
+
+                this.config.set("messages.givekey.player_offline", "No such player: {PLAYER}");
+                this.config.set("messages.givekey.invalid_item", "Invalid item: {ITEM}");
+                this.config.set("messages.givekey.item_must_not_be_air", "Item must not be air");
+                this.config.set("messages.givekey.message_to_player", "You've been given a key!");
+
+                this.config.set("version", this.plugin.getDescription().getVersion());
+                this.reload();
+
+                this.plugin.getLogger().info("Config updated to 0.0.3 (/givekey command)");
+                break;
+            case "0.0.3":
                 // Correct version
                 break;
             default:

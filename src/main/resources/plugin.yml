@@ -1,5 +1,5 @@
 name: LotteryBox
-version: 0.0.2
+version: 0.0.3
 description: Chance-based lottery boxes
 
 author: Gareth Coles
@@ -14,6 +14,10 @@ commands:
         description: Edits a lottery box
         usage: /<command> <name> <operation> [params]
         permission: lotterybox.chbox
+    givekey:
+        description: Gives a key to a player
+        usage: /<command> <player> [item] [name]
+        permission: lotterybox.givekey
     lsbox:
         description: Lists lottery boxes and gets information on them
         usage: /<command> [name] ["rewards"]
@@ -35,6 +39,7 @@ permissions:
     lotterybox.*:
             children:
                 - lotterybox.chbox
+                - lotterybox.givekey
                 - lotterybox.lsbox
                 - lotterybox.mkbox
                 - lotterybox.mkkey
@@ -44,6 +49,7 @@ permissions:
     lotterybox.admin:
             children:
                 - lotterybox.chbox
+                - lotterybox.givekey
                 - lotterybox.lsbox
                 - lotterybox.mkbox
                 - lotterybox.mkkey
@@ -51,6 +57,8 @@ permissions:
             description: All the LotteryBox admin commands
     lotterybox.chbox:
         description: Access the /chbox command
+    lotterybox.givekey:
+        description: Access the /givekey command
     lotterybox.lsbox:
         description: Access the /lsbox command
     lotterybox.mkbox:
