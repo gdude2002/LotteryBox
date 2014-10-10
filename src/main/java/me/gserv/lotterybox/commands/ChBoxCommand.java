@@ -256,7 +256,7 @@ public class ChBoxCommand implements CommandExecutor {
                     if (box.hasReward(rewardName)) {
                         args.clear();
                         args.put("reward", rewardName);
-                        this.plugin.sendMessage(commandSender, "chbox.reward.exists", args);
+                        this.plugin.sendMessage(commandSender, "chbox.reward.reward_exists", args);
                     } else {
                         String type = strings[4];
 
@@ -267,7 +267,7 @@ public class ChBoxCommand implements CommandExecutor {
                             args.put("name", rewardName);
                             args.put("type", "command");
 
-                            this.plugin.sendMessage(commandSender, "chbox.reward.exists", args);
+                            this.plugin.sendMessage(commandSender, "chbox.reward.reward_added", args);
                             this.plugin.sendMessage(commandSender, "chbox.reward.reminder");
                         } else if ("item".equalsIgnoreCase(type)) {
                             box.addItemReward(rewardName, new ItemStack(Material.AIR), 0);
@@ -276,7 +276,7 @@ public class ChBoxCommand implements CommandExecutor {
                             args.put("name", rewardName);
                             args.put("type", "item");
 
-                            this.plugin.sendMessage(commandSender, "chbox.reward.exists", args);
+                            this.plugin.sendMessage(commandSender, "chbox.reward.reward_added", args);
                             this.plugin.sendMessage(commandSender, "chbox.reward.reminder");
                         } else if ("money".equalsIgnoreCase(type)) {
                             if (this.plugin.hasEconomy()) {
@@ -286,7 +286,7 @@ public class ChBoxCommand implements CommandExecutor {
                                 args.put("name", rewardName);
                                 args.put("type", "money");
 
-                                this.plugin.sendMessage(commandSender, "chbox.reward.exists", args);
+                                this.plugin.sendMessage(commandSender, "chbox.reward.reward_added", args);
                                 this.plugin.sendMessage(commandSender, "chbox.reward.reminder");
                             } else {
                                 this.plugin.sendMessage(commandSender, "chbox.reward.no_economy");
